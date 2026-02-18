@@ -1,35 +1,134 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React, { useState } from "react";
+import LandingScreen from "./pages/LandingScreen";
+import BusinessContextScreen from "./pages/BusinessContextScreen";
+import LocationScreen from "./pages/LocationScreen";
+import EnergyContextScreen from "./pages/EnergyContextScreen";
+import EquipmentProfilingScreen from "./pages/EquipmentProfilingScreen";
+import ReviewScreen from "./pages/ReviewScreen";
+import ProcessingAnalysisScreen from "./pages/ProcessingAnalysisScreen";
+import ResultsScreen from "./pages/ResultsScreen";
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+  const [screen, setScreen] = useState("landing");
+
+  const [formData, setFormData] = useState({
+    businessName: "",
+    businessType: "",
+    location: { country: "", state: "", city: "", address: "" },
+    currencySymbol: "",
+    currencyCode: "",
+    energy: null, // { energy_scenario, uses_diesel, monthly_cost, currency, diesel? }
+    equipment: {
+      refrigerators: { capacity: "", quantity: 0 },
+      freezers: { capacity: "", quantity: 0 },
+      coldRoom: { capacity: "", quantity: 0 },
+      lighting: { enabled: false, count: 0, type: "" },
+      other: { fans: false, pos: false, smallApps: false },
+    },
+  });
+
+  const [outcome, setOutcome] = useState(null); // { ok, data? error? }
+
+  const update = (patch) => setFormData((p) => ({ ...p, ...patch }));
+
+  const reset = () => {
+    setOutcome(null);
+    setFormData((p) => ({
+      ...p,
+      businessName: "",
+      businessType: "",
+      location: { country: "", state: "", city: "", address: "" },
+      currencySymbol: "",
+      currencyCode: "",
+      energy: null,
+      equipment: {
+        refrigerators: { capacity: "", quantity: 0 },
+        freezers: { capacity: "", quantity: 0 },
+        coldRoom: { capacity: "", quantity: 0 },
+        lighting: { enabled: false, count: 0, type: "" },
+        other: { fans: false, pos: false, smallApps: false },
+      },
+    }));
+    setScreen("business-context");
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <div className="min-h-screen flex flex-col">
+      {screen === "landing" && (
+        <LandingScreen onStart={() => setScreen("business-context")} />
+      )}
 
-export default App
+      {screen === "business-context" && (
+        <BusinessContextScreen
+          onContinue={({ businessName, businessType }) => {
+            update({ businessName, businessType });
+            setScreen("location");
+          }}
+          onBack={() => setScreen("landing")}
+        />
+      )}
+
+      {screen === "location" && (
+        <LocationScreen
+          onContinue={(location, currencyInfo) => {
+            update({
+              location,
+              currencySymbol: currencyInfo.currencySymbol,
+              currencyCode: currencyInfo.currencyCode,
+            });
+            setScreen("energy-context");
+          }}
+          onBack={() => setScreen("business-context")}
+        />
+      )}
+
+      {screen === "energy-context" && (
+        <EnergyContextScreen
+          currencySymbol={formData.currencySymbol}
+          currencyCode={formData.currencyCode}
+          onContinue={(energyObj) => {
+            update({ energy: energyObj });
+            setScreen("equipment-profile");
+          }}
+          onBack={() => setScreen("location")}
+        />
+      )}
+
+      {screen === "equipment-profile" && (
+        <EquipmentProfilingScreen
+          onContinue={(equipment) => {
+            update({ equipment });
+            setScreen("review");
+          }}
+          onBack={() => setScreen("energy-context")}
+        />
+      )}
+
+      {screen === "review" && (
+        <ReviewScreen
+          data={formData}
+          onContinue={() => setScreen("processing")}
+          onBack={() => setScreen("equipment-profile")}
+        />
+      )}
+
+      {screen === "processing" && (
+        <ProcessingAnalysisScreen
+          formData={formData}
+          onComplete={(result) => {
+            setOutcome(result);
+            setScreen("results");
+          }}
+        />
+      )}
+
+      {screen === "results" && (
+        <ResultsScreen
+          outcome={outcome}
+          currencySymbol={formData.currencySymbol || "$"}
+          onReset={reset}
+        />
+      )}
+    </div>
+  );
+}
