@@ -5,7 +5,7 @@ export default function StateCityFields({ state, setState, city, setCity }) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
       <div className="animate-slide-up opacity-0 animation-delay-200">
-        <label className="block mb-2 px-1">
+        <label htmlFor="state-input" className="block mb-2 px-1">
           <Typography
             variant="caption"
             className="font-bold text-gray-700 uppercase tracking-widest"
@@ -14,6 +14,8 @@ export default function StateCityFields({ state, setState, city, setCity }) {
           </Typography>
         </label>
         <input
+          id="state-input"
+          name="state"
           type="text"
           value={state}
           onChange={(e) => setState(e.target.value)}
@@ -23,7 +25,7 @@ export default function StateCityFields({ state, setState, city, setCity }) {
       </div>
 
       <div className="animate-slide-up opacity-0 animation-delay-300">
-        <label className="block mb-2 px-1">
+        <label htmlFor="city-input" className="block mb-2 px-1">
           <Typography
             variant="caption"
             className="font-bold text-gray-700 uppercase tracking-widest"
@@ -32,6 +34,8 @@ export default function StateCityFields({ state, setState, city, setCity }) {
           </Typography>
         </label>
         <input
+          id="city-input"
+          name="city"
           type="text"
           value={city}
           onChange={(e) => setCity(e.target.value)}

@@ -85,10 +85,7 @@ export default function EnergyContextScreen({
       <div className="max-w-xl mx-auto w-full">
         <BackNav onBack={onBack} />
 
-        <StepHeader
-          title="Energy & Power Context"
-          subtitle="We only support two scenarios in v1 (per model coverage)."
-        />
+        <StepHeader title="Power Supply & Energy Cost" />
 
         <div className="space-y-10">
           <div className="animate-slide-up opacity-0 animation-delay-100">

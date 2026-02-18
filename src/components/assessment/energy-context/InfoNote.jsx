@@ -8,8 +8,7 @@ export default function InfoNote() {
           info
         </span>
         <p className="text-[11px] text-gray-600 leading-relaxed">
-          Intermittent-grid only is not modeled in v1. If you use a generator
-          during outages, pick the diesel option.
+          If you use a generator during outages, pick the diesel option.
         </p>
       </div>
     </div>

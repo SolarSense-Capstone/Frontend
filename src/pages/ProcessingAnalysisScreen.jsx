@@ -24,7 +24,6 @@ export default function ProcessingAnalysisScreen({ onComplete, formData }) {
         const payload = buildAnalyzePayload(formData);
         const data = await analyzeAssessment(payload);
 
-        // Backend doc: may return 503 with { status: "INCOMPLETE" }
         if (data?.status === "INCOMPLETE") {
           throw Object.assign(new Error("Analysis incomplete"), {
             status: 503,
@@ -35,18 +34,28 @@ export default function ProcessingAnalysisScreen({ onComplete, formData }) {
         if (!cancelled) setResult(data);
       } catch (err) {
         if (cancelled) return;
+
+        const status = err?.response?.status || err?.status || 0;
+        const body = err?.response?.data || err?.data || null;
+
+        console.log("ANALYZE ERROR STATUS:", status);
+        console.log("ANALYZE ERROR BODY:", body);
+        console.log("ANALYZE PAYLOAD SENT:", buildAnalyzePayload(formData));
+
         setErrorState({
-          status: err.status || 0,
+          status,
           message:
-            err.data?.message ||
-            err.data?.error ||
+            body?.message ||
+            body?.error ||
             err.message ||
             "Unable to complete analysis",
+          details: body,
         });
       }
     }
 
     run();
+
     return () => {
       cancelled = true;
     };

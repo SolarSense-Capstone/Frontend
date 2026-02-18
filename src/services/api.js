@@ -1,10 +1,8 @@
 import axios from "axios";
 
-const baseURL = import.meta.env.VITE_API_BASE_URL || "http://localhost:3000";
-
-export const api = axios.create({
-  baseURL,
-  timeout: 20000,
+const api = axios.create({
+  baseURL: import.meta.env.VITE_API_BASE_URL,
+  timeout: 30000,
   headers: { "Content-Type": "application/json" },
 });
 
@@ -54,8 +52,8 @@ export function normalizeApiError(err) {
   };
 }
 
-export async function analyzeAssessment(payload) {
-  // POST /api/v1/analyze (per backend+DSE doc)
-  const res = await api.post("/api/v1/analyze", payload);
+export const analyzeAssessment = async (payload) => {
+  const res = await api.post("/api/v1/assessments/analyze", payload);
+
   return res.data;
-}
+};

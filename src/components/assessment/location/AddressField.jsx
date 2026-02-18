@@ -5,7 +5,7 @@ export default function AddressField({ address, setAddress }) {
   return (
     <div className="animate-slide-up opacity-0 animation-delay-400">
       <div className="flex justify-between items-center mb-2 px-1">
-        <label>
+        <label htmlFor="street-address">
           <Typography
             variant="caption"
             className="font-bold text-gray-700 uppercase tracking-widest"
@@ -19,6 +19,8 @@ export default function AddressField({ address, setAddress }) {
       </div>
 
       <input
+        id="street-address"
+        name="address"
         type="text"
         value={address}
         onChange={(e) => setAddress(e.target.value)}

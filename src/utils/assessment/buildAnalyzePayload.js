@@ -1,4 +1,3 @@
-// src/utils/assessment/buildAnalyzePayload.js
 const BUSINESS_TYPE_MAP = {
   restaurant: "Restaurant",
   retail: "Retail",
@@ -9,6 +8,7 @@ const BUSINESS_TYPE_MAP = {
   butchery: "butchery",
   grocery: "grocery",
   mini_supermarket: "mini_supermarket",
+  cafe: "Cafe",
 };
 
 function toNumberOrFallback(value, fallback) {
@@ -16,32 +16,43 @@ function toNumberOrFallback(value, fallback) {
   return Number.isFinite(n) ? n : fallback;
 }
 
+function clamp(n, min, max) {
+  return Math.min(max, Math.max(min, n));
+}
+
+function sanitizeBusinessName(name) {
+  return String(name || "")
+    .replace(/[^a-zA-Z0-9 _\-&/]/g, "")
+    .trim();
+}
+
 export default function buildAnalyzePayload(formData) {
   const country = (formData?.location?.country || "").trim();
   const city = (formData?.location?.city || "").trim();
 
-  // IMPORTANT: don't allow NaN
   const latitude = toNumberOrFallback(formData?.location?.latitude, 6.4969);
   const longitude = toNumberOrFallback(formData?.location?.longitude, 3.3553);
 
-  // businessType must match allowed list casing
-  const rawType = (formData?.businessType || "").trim();
-  const businessType = BUSINESS_TYPE_MAP[rawType] || rawType; // if already "Restaurant", keep it
+  const rawType = String(formData?.businessType || "").trim();
+  const typeKey = rawType.toLowerCase();
+  const businessType = BUSINESS_TYPE_MAP[typeKey] || rawType;
 
-  // equipment_list format (as you’re already sending)
-  const equipment_list = [];
-
-  const hours = toNumberOrFallback(formData?.equipment?.operatingHours, 24);
+  const equipment = [];
+  const hoursPerDay = clamp(
+    toNumberOrFallback(formData?.equipment?.operatingHours, 24),
+    0,
+    24,
+  );
 
   const fridgesQty = toNumberOrFallback(
     formData?.equipment?.refrigerators?.quantity,
     0,
   );
   if (fridgesQty > 0) {
-    equipment_list.push({
-      equipment_type: "refrigerator",
+    equipment.push({
+      type: "refrigerator",
       quantity: fridgesQty,
-      hours_per_day: hours,
+      hoursPerDay,
     });
   }
 
@@ -50,10 +61,10 @@ export default function buildAnalyzePayload(formData) {
     0,
   );
   if (freezersQty > 0) {
-    equipment_list.push({
-      equipment_type: "freezer",
+    equipment.push({
+      type: "freezer",
       quantity: freezersQty,
-      hours_per_day: hours,
+      hoursPerDay,
     });
   }
 
@@ -62,37 +73,42 @@ export default function buildAnalyzePayload(formData) {
     0,
   );
   if (coldRoomQty > 0) {
-    equipment_list.push({
-      equipment_type: "cold_room",
+    equipment.push({
+      type: "cold_room",
       quantity: coldRoomQty,
-      hours_per_day: hours,
+      hoursPerDay,
     });
   }
 
   const uses_diesel = !!formData?.energy?.uses_diesel;
 
   const payload = {
-    business_name: (formData?.businessName || "").trim(),
-    businessType, // ✅ required key
-    country, // ✅ required key
-    city, // ✅ required key
-    latitude, // ✅ must be valid number
-    longitude, // ✅ must be valid number
-    equipment_list, // ✅ correct key
+    business_name: sanitizeBusinessName(formData?.businessName || "Business"),
+    businessType,
+    country,
+    city,
+    latitude,
+    longitude,
+
+    equipment,
+
     uses_diesel,
   };
 
-  // If uses_diesel=true, you MUST send valid diesel fields (and within ranges)
   if (uses_diesel) {
-    payload.diesel_hours_per_day = toNumberOrFallback(
-      formData?.energy?.diesel?.hours_per_day,
+    payload.diesel_hours_per_day = clamp(
+      toNumberOrFallback(formData?.energy?.diesel?.hours_per_day, 0),
       0,
+      24,
     );
-    payload.diesel_price_per_liter = toNumberOrFallback(
-      formData?.energy?.diesel?.price_per_liter,
+
+    payload.diesel_price_per_liter = clamp(
+      toNumberOrFallback(formData?.energy?.diesel?.price_per_liter, 0),
       0,
+      10,
     );
   }
 
+  console.log(" FULL PAYLOAD:", payload);
   return payload;
 }
