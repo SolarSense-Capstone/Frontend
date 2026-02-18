@@ -47,9 +47,8 @@ export default function FailureCard({
       {showHelp ? (
         <div className="mt-6 p-4 rounded-xl bg-gray-50 border border-gray-100 text-left">
           <p className="text-xs text-gray-600 leading-relaxed">
-            If you see “Service Unavailable (503)”, it usually means the backend
-            couldn’t reach one of the model services. This is not your fault on
-            frontend. Your job is to show a friendly message and allow retry.
+            Looks like something didn't go through on our end. Give it another
+            try shortly—we're working behind the scenes.
           </p>
         </div>
       ) : null}
