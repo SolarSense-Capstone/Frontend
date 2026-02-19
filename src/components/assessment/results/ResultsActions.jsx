@@ -1,14 +1,17 @@
-import React from "react";
 import Button from "../../ui/Button";
 
-export default function ResultsActions({ onReset }) {
+export default function ResultsActions({ onReset, data }) {
+  const reportUrl = data?.report_url;
+
   return (
     <div className="flex flex-col sm:flex-row gap-4 pt-2">
       <Button
         onClick={() => {
-          alert(
-            "PDF download is backend-owned. Ask backend to provide report_url or assessment_id for /report.",
-          );
+          if (reportUrl) window.open(reportUrl, "_blank");
+          else
+            alert(
+              "PDF not available yet. Backend needs to provide report_url or assessment_id.",
+            );
         }}
         className="flex-1 py-4 shadow-xl group"
       >

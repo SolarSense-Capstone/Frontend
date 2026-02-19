@@ -90,7 +90,7 @@ export default function ResultsScreen({ onReset, currencySymbol, outcome }) {
             <DieselEconomicsCard data={data} />
           ) : null}
 
-          <ResultsActions onReset={onReset} />
+          <ResultsActions onReset={onReset} data={data} />
         </div>
       </div>
     </div>
