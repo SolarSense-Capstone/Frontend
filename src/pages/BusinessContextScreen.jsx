@@ -6,41 +6,78 @@ import BusinessTypeGrid from "../components/assessment/business-context/Business
 import StickyContinue from "../components/common/StickyContinue";
 
 const BUSINESS_TYPES = [
+  // ✅ Match backend allowed values exactly (backendValue)
   {
-    id: "frozen-food",
-    label: "Frozen Food Retail",
-    icon: "ac_unit",
-    desc: "Small scale retail cooling",
-  },
-  {
-    id: "butchery",
-    label: "Butchery",
-    icon: "restaurant",
-    desc: "High intensity meat preservation",
-  },
-  {
-    id: "cold-storage",
-    label: "Cold Storage Facility",
-    icon: "kitchen",
-    desc: "Large scale preservation",
-  },
-  {
-    id: "supermarket",
-    label: "Supermarket / Mini-Mart",
-    icon: "shopping_basket",
-    desc: "Mixed usage profiles",
+    id: "cafe",
+    backendValue: "Cafe",
+    label: "Cafe",
+    icon: "local_cafe",
+    desc: "Small restaurant/cafe loads",
   },
   {
     id: "restaurant",
+    backendValue: "Restaurant",
     label: "Restaurant / Quick Service",
     icon: "lunch_dining",
-    desc: "Cooking and cooling load",
+    desc: "Cooking + cooling load",
   },
   {
-    id: "other-food",
-    label: "Other Food-Based Business",
+    id: "retail",
+    backendValue: "Retail",
+    label: "Retail",
     icon: "storefront",
-    desc: "Generic food production",
+    desc: "Small shops & stores",
+  },
+  {
+    id: "office",
+    backendValue: "Office",
+    label: "Office",
+    icon: "apartment",
+    desc: "Office energy profile",
+  },
+  {
+    id: "hotel",
+    backendValue: "Hotel",
+    label: "Hotel",
+    icon: "hotel",
+    desc: "Hospitality loads",
+  },
+  {
+    id: "gym",
+    backendValue: "Gym",
+    label: "Gym",
+    icon: "fitness_center",
+    desc: "Fitness facility loads",
+  },
+  {
+    id: "bakery",
+    backendValue: "Bakery",
+    label: "Bakery",
+    icon: "bakery_dining",
+    desc: "Ovens + cooling",
+  },
+
+  // ⚠️ backend expects these lowercase exactly (per your validation message)
+  {
+    id: "butchery",
+    backendValue: "butchery",
+    label: "Butchery",
+    icon: "restaurant",
+    desc: "Meat preservation",
+  },
+  {
+    id: "grocery",
+    backendValue: "grocery",
+    label: "Grocery",
+    icon: "shopping_cart",
+    desc: "Groceries + refrigeration",
+  },
+  {
+    id: "mini_supermarket",
+    backendValue: "mini_supermarket",
+    label: "Mini Supermarket",
+    icon: "shopping_basket",
+    desc: "Mini-mart / mini supermarket",
   },
 ];
 
@@ -49,6 +86,8 @@ export default function BusinessContextScreen({ onContinue, onBack }) {
   const [businessName, setBusinessName] = useState("");
 
   const canContinue = !!selectedId;
+
+  const selectedType = BUSINESS_TYPES.find((t) => t.id === selectedId);
 
   return (
     <div className="flex-1 flex flex-col bg-[#F9FAFB] px-6 pt-12 md:pt-24 pb-32 md:pb-40">
@@ -81,7 +120,12 @@ export default function BusinessContextScreen({ onContinue, onBack }) {
       <StickyContinue
         canContinue={canContinue}
         onClick={() =>
-          canContinue && onContinue({ businessName, businessType: selectedId })
+          canContinue &&
+          onContinue({
+            businessName,
+            // ✅ send exactly what backend validates
+            businessType: selectedType?.backendValue || "",
+          })
         }
       />
     </div>

@@ -42,7 +42,7 @@ const EquipmentPatternScreen = ({ onContinue, onBack }) => {
         </div>
       </div>
 
-      <StickyContinue canContinue={true} onClick={handleContinue} />
+      <StickyContinue canContinue={isValid} onClick={handleContinue} />
     </div>
   );
 };

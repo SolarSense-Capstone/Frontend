@@ -117,7 +117,7 @@ export default function EnergyContextScreen({
         </div>
       </div>
 
-      <StickyContinue isValid={isValid} onClick={handleContinue} />
+      <StickyContinue canContinue={isValid} onClick={handleContinue} />
     </div>
   );
 }
