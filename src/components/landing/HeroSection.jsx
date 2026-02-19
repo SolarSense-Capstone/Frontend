@@ -131,14 +131,15 @@ export default function HeroSection({ onStart, scrollToSection }) {
                 variant="body1"
                 className="italic font-medium mb-2 md:mb-4 opacity-90 text-[10px] md:text-sm leading-relaxed"
               >
-                "This tool saved us from a bad investment and helped us find the
-                right system for our butchery."
+                Cut energy costs with confidence.
               </Typography>
+
               <Typography
                 variant="caption"
-                className="font-black uppercase tracking-widest text-[#2E7D32] text-[8px] md:text-[10px]"
+                className="font-semibold text-[#2E7D32] text-[10px] md:text-xs tracking-wide"
               >
-                — David M., SME Owner
+                Discover potential savings, system size, and ROI before
+                investing in solar.
               </Typography>
             </div>
           </div>
