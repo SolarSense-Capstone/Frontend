@@ -28,7 +28,7 @@ export default function AddressField({ address, setAddress }) {
         className="w-full bg-white border border-gray-200 rounded-xl px-4 py-4 focus:ring-2 focus:ring-[#2E7D32] outline-none shadow-sm"
       />
       <p className="mt-2 text-[11px] text-gray-400 italic px-1">
-        Optional. Estimates are based on regional energy data.
+        Solar estimates are based on regional data.
       </p>
     </div>
   );

@@ -25,9 +25,13 @@ export default function MonthlyCostField({
           </span>
         </div>
         <input
-          type="number"
+          type="text"
+          inputMode="numeric"
           value={value}
-          onChange={(e) => onChange(e.target.value)}
+          onChange={(e) => {
+            const val = e.target.value.replace(/[^0-9.]/g, ""); // only allow numbers and dot
+            onChange(val);
+          }}
           placeholder="0.00"
           className="w-full bg-white border border-gray-200 rounded-xl pl-12 pr-4 py-5 text-xl font-bold focus:ring-2 focus:ring-[#2E7D32] outline-none shadow-sm"
         />
