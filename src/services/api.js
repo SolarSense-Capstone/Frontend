@@ -57,3 +57,9 @@ export const analyzeAssessment = async (payload) => {
 
   return res.data;
 };
+
+export const sendAssessmentReport = async (assessmentId, email) => {
+  // Assuming a standard POST endpoint for emailing a report
+  const res = await api.post(`/api/v1/assessments/${assessmentId}/send-report`, { email });
+  return res.data;
+};
