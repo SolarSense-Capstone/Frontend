@@ -4,6 +4,8 @@ import StickyContinue from "../components/common/StickyContinue";
 import StepIntro from "../components/assessment/business-context/StepIntro";
 import BusinessNameField from "../components/assessment/business-context/BusinessNameField";
 
+import ProgressBar from "../components/common/ProgressBar";
+
 export default function BusinessNameScreen({ initialName = "", onContinue, onBack }) {
     const [businessName, setBusinessName] = useState(initialName);
 
@@ -13,6 +15,10 @@ export default function BusinessNameScreen({ initialName = "", onContinue, onBac
         <div className="flex-1 flex flex-col bg-[#F9FAFB] px-6 pt-12 md:pt-24 pb-32 md:pb-40">
             <div className="max-w-3xl mx-auto w-full flex flex-col items-center">
                 <BackNav onBack={onBack} />
+
+                <div className="w-full self-stretch">
+                    <ProgressBar step={1} totalSteps={5} />
+                </div>
 
                 <StepIntro
                     title="What is the name of your business?"
