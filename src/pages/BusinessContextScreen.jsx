@@ -87,6 +87,8 @@ const BUSINESS_TYPES = [
   }
 ];
 
+import ProgressBar from "../components/common/ProgressBar";
+
 export default function BusinessContextScreen({ initialType = "", onContinue, onBack }) {
   const initialSelected = BUSINESS_TYPES.find(t => t.backendValue === initialType)?.id || null;
   const [selectedId, setSelectedId] = useState(initialSelected);
@@ -99,6 +101,10 @@ export default function BusinessContextScreen({ initialType = "", onContinue, on
     <div className="flex-1 flex flex-col bg-[#F9FAFB] px-6 pt-12 md:pt-24 pb-32 md:pb-40">
       <div className="max-w-3xl mx-auto w-full flex flex-col items-center">
         <BackNav onBack={onBack} />
+
+        <div className="w-full self-stretch">
+          <ProgressBar step={2} totalSteps={5} />
+        </div>
 
         <StepIntro
           title="What type of business do you run?"

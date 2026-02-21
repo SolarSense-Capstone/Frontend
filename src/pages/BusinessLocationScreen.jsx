@@ -38,6 +38,8 @@ const SCENARIOS = [
     },
 ];
 
+import ProgressBar from "../components/common/ProgressBar";
+
 export default function BusinessLocationScreen({
     initialLocation,
     initialEnergy,
@@ -109,6 +111,7 @@ export default function BusinessLocationScreen({
         <div className="flex-1 flex flex-col bg-[#F9FAFB] px-6 pt-12 md:pt-24 pb-32 md:pb-40">
             <div className="max-w-xl mx-auto w-full">
                 <BackNav onBack={onBack} />
+                <ProgressBar step={3} totalSteps={5} />
 
                 {/* --- LOCATION SECTION --- */}
                 <LocationStepHeader title="Where is your business located?" />

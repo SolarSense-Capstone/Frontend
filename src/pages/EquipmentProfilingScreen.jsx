@@ -12,6 +12,8 @@ const EQUIPMENT_TYPES = [
   { id: "lighting", label: "Lighting" },
 ];
 
+import ProgressBar from "../components/common/ProgressBar";
+
 export default function EquipmentProfilingScreen({ initialEquipment, onContinue, onBack }) {
   // equipment object comes from App.jsx:
   // { freezers: { quantity: 0, hoursPerDay: 0 }, ... }
@@ -59,6 +61,7 @@ export default function EquipmentProfilingScreen({ initialEquipment, onContinue,
     <div className="flex-1 flex flex-col bg-[#F9FAFB] px-6 pt-12 md:pt-20 pb-32 md:pb-40">
       <div className="max-w-2xl mx-auto w-full">
         <BackNav onBack={onBack} />
+        <ProgressBar step={4} totalSteps={5} />
 
         <StepHeader
           title="What equipment do you use daily?"
