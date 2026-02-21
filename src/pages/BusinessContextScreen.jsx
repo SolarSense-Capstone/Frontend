@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import StepIntro from "../components/assessment/business-context/StepIntro";
 import BackNav from "../components/common/BackNav";
-import BusinessNameField from "../components/assessment/business-context/BusinessNameField";
 import BusinessTypeGrid from "../components/assessment/business-context/BusinessTypeGrid";
 import StickyContinue from "../components/common/StickyContinue";
 
@@ -78,12 +77,14 @@ const BUSINESS_TYPES = [
     label: "Mini Supermarket",
     icon: "shopping_basket",
     desc: "Mini-mart / mini supermarket",
-  },
+  }
 ];
 
-export default function BusinessContextScreen({ onContinue, onBack }) {
-  const [selectedId, setSelectedId] = useState(null);
-  const [businessName, setBusinessName] = useState("");
+import ProgressBar from "../components/common/ProgressBar";
+
+export default function BusinessContextScreen({ initialType = "", onContinue, onBack }) {
+  const initialSelected = BUSINESS_TYPES.find(t => t.backendValue === initialType)?.id || null;
+  const [selectedId, setSelectedId] = useState(initialSelected);
 
   const canContinue = !!selectedId;
 
@@ -94,17 +95,13 @@ export default function BusinessContextScreen({ onContinue, onBack }) {
       <div className="max-w-3xl mx-auto w-full flex flex-col items-center">
         <BackNav onBack={onBack} />
 
-        <StepIntro
-          title="Tell us about your business"
-          subtitle="This helps us personalize your results screen."
-          className="text-center mb-8 animate-slide-up opacity-0"
-        />
-
-        <BusinessNameField value={businessName} onChange={setBusinessName} />
+        <div className="w-full self-stretch">
+          <ProgressBar step={2} totalSteps={5} />
+        </div>
 
         <StepIntro
           title="What type of business do you run?"
-          subtitle="Select the category that best describes your primary operations."
+          subtitle=""
           titleVariant="h3"
           titleClassName="mb-2 text-xl font-bold"
           className="text-center mb-8 animate-slide-up opacity-0"
@@ -122,8 +119,6 @@ export default function BusinessContextScreen({ onContinue, onBack }) {
         onClick={() =>
           canContinue &&
           onContinue({
-            businessName,
-            // ✅ send exactly what backend validates
             businessType: selectedType?.backendValue || "",
           })
         }

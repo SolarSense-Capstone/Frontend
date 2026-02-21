@@ -15,13 +15,13 @@ import StickyContinue from "../components/common/StickyContinue";
 const SCENARIOS = [
   {
     id: "grid_only",
-    label: "Fully on grid",
+    label: "Fully Grid",
     desc: "You mainly use grid electricity.",
     icon: "power",
   },
   {
     id: "diesel_replacement",
-    label: "Off-grid with diesel generator",
+    label: "Off Grid with Diesel Generator",
     desc: "You use generator for a significant portion of power.",
     icon: "local_gas_station",
   },
@@ -90,7 +90,7 @@ export default function EnergyContextScreen({
         <div className="space-y-10">
           <div className="animate-slide-up opacity-0 animation-delay-100">
             <ScenarioSelector
-              label="Select your energy scenario"
+              label="How does your business currently get electricity?"
               scenarios={SCENARIOS}
               value={scenario}
               onChange={setScenario}

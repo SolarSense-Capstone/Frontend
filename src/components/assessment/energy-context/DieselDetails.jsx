@@ -27,11 +27,15 @@ export default function DieselDetails({
           </Typography>
         </label>
         <input
-          type="number"
+          type="text"
+          inputMode="numeric"
           min="0"
           max="24"
           value={dieselHoursPerDay}
-          onChange={(e) => setDieselHoursPerDay(e.target.value)}
+          onChange={(e) => {
+            const val = e.target.value.replace(/[^0-9.]/g, "");
+            setDieselHoursPerDay(val);
+          }}
           placeholder="e.g., 18"
           className="w-full bg-gray-50 border border-gray-100 rounded-xl px-5 py-4 outline-none focus:ring-2 focus:ring-[#2E7D32]"
         />
@@ -45,10 +49,14 @@ export default function DieselDetails({
           </Typography>
         </label>
         <input
-          type="number"
+          type="text"
+          inputMode="numeric"
           min="0"
           value={dieselPricePerLiter}
-          onChange={(e) => setDieselPricePerLiter(e.target.value)}
+          onChange={(e) => {
+            const val = e.target.value.replace(/[^0-9.]/g, "");
+            setDieselPricePerLiter(val);
+          }}
           placeholder="e.g., 1.35"
           className="w-full bg-gray-50 border border-gray-100 rounded-xl px-5 py-4 outline-none focus:ring-2 focus:ring-[#2E7D32]"
         />

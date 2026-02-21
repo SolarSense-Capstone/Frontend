@@ -2,7 +2,7 @@ import React from "react";
 import Typography from "../../ui/Typography";
 import Card from "../../ui/Card";
 
-export default function DieselEconomicsCard({ data }) {
+export default function DieselEconomicsCard({ data, formatMoney }) {
   return (
     <Card className="p-6 bg-white border-gray-100">
       <Typography
@@ -22,7 +22,7 @@ export default function DieselEconomicsCard({ data }) {
         <div className="flex justify-between p-4 rounded-xl bg-gray-50 border border-gray-100">
           <span className="text-gray-500">Diesel price/liter</span>
           <span className="font-bold text-gray-800">
-            {data.diesel_details.price_per_liter}
+            {formatMoney ? formatMoney(data.diesel_details.price_per_liter) : data.diesel_details.price_per_liter}
           </span>
         </div>
         <div className="flex justify-between p-4 rounded-xl bg-gray-50 border border-gray-100">
@@ -34,7 +34,7 @@ export default function DieselEconomicsCard({ data }) {
         <div className="flex justify-between p-4 rounded-xl bg-gray-50 border border-gray-100">
           <span className="text-gray-500">Effective tariff</span>
           <span className="font-bold text-gray-800">
-            {data.diesel_details.effective_tariff?.toFixed?.(2)} / kWh
+            {formatMoney ? formatMoney(data.diesel_details.effective_tariff) : data.diesel_details.effective_tariff?.toFixed?.(2)} / kWh
           </span>
         </div>
       </div>

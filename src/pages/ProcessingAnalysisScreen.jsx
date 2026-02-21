@@ -6,9 +6,10 @@ import { analyzeAssessment } from "../services/api";
 import buildAnalyzePayload from "../utils/assessment/buildAnalyzePayload";
 
 const STEPS = [
-  "Submitting your inputs to the backend",
-  "Running solar + ROI models",
-  "Assembling your results",
+  "Estimating energy use",
+  "Analyzing solar potential",
+  "Calculating savings",
+  "Generating 25-year projection",
 ];
 
 export default function ProcessingAnalysisScreen({ onComplete, formData }) {
