@@ -77,13 +77,6 @@ const BUSINESS_TYPES = [
     label: "Mini Supermarket",
     icon: "shopping_basket",
     desc: "Mini-mart / mini supermarket",
-  },
-  {
-    id: "other",
-    backendValue: "other",
-    label: "Other",
-    icon: "star",
-    desc: "Other business types",
   }
 ];
 
