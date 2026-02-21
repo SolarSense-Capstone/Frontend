@@ -1,3 +1,5 @@
+import { localToUSD } from "../currency/converter";
+
 const BUSINESS_TYPE_MAP = {
   restaurant: "Restaurant",
   retail: "Retail",
@@ -9,6 +11,17 @@ const BUSINESS_TYPE_MAP = {
   grocery: "grocery",
   mini_supermarket: "mini_supermarket",
   cafe: "Cafe",
+  other: "other",
+};
+
+// Map frontend keys to backend expected equipment types
+const EQUIPMENT_KEY_MAP = {
+  freezers: "freezer",
+  refrigerators: "refrigerator",
+  coldRoom: "cold_room",
+  displayChillers: "display_chiller",
+  iceMachines: "ice_machine",
+  lighting: "lighting",
 };
 
 function toNumberOrFallback(value, fallback) {
@@ -38,45 +51,19 @@ export default function buildAnalyzePayload(formData) {
   const businessType = BUSINESS_TYPE_MAP[typeKey] || rawType;
 
   const equipment = [];
-  const hoursPerDay = clamp(
-    toNumberOrFallback(formData?.equipment?.operatingHours, 24),
-    0,
-    24,
-  );
 
-  const fridgesQty = toNumberOrFallback(
-    formData?.equipment?.refrigerators?.quantity,
-    0,
-  );
-  if (fridgesQty > 0) {
-    equipment.push({
-      type: "refrigerator",
-      quantity: fridgesQty,
-      hoursPerDay,
-    });
-  }
-
-  const freezersQty = toNumberOrFallback(
-    formData?.equipment?.freezers?.quantity,
-    0,
-  );
-  if (freezersQty > 0) {
-    equipment.push({
-      type: "freezer",
-      quantity: freezersQty,
-      hoursPerDay,
-    });
-  }
-
-  const coldRoomQty = toNumberOrFallback(
-    formData?.equipment?.coldRoom?.quantity,
-    0,
-  );
-  if (coldRoomQty > 0) {
-    equipment.push({
-      type: "cold_room",
-      quantity: coldRoomQty,
-      hoursPerDay,
+  // Construct equipment array dynamically
+  if (formData?.equipment) {
+    Object.entries(formData.equipment).forEach(([key, item]) => {
+      const quantity = toNumberOrFallback(item.quantity, 0);
+      if (quantity > 0) {
+        const hoursPerDay = clamp(toNumberOrFallback(item.hoursPerDay, 0), 0, 24);
+        equipment.push({
+          type: EQUIPMENT_KEY_MAP[key] || key,
+          quantity,
+          hoursPerDay,
+        });
+      }
     });
   }
 
@@ -102,11 +89,14 @@ export default function buildAnalyzePayload(formData) {
       24,
     );
 
-    payload.diesel_price_per_liter = clamp(
+    const localDieselPrice = clamp(
       toNumberOrFallback(formData?.energy?.diesel?.price_per_liter, 0),
       0,
-      10,
+      1000000, // expanded limit for local currencies
     );
+
+    // Convert to USD before dispatching
+    payload.diesel_price_per_liter = localToUSD(localDieselPrice, formData?.currencyCode);
   }
 
   console.log(" FULL PAYLOAD:", payload);
