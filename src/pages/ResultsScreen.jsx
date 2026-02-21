@@ -1,6 +1,5 @@
 import React, { useMemo, useState } from "react";
 import { usdToLocal } from "../utils/currency/converter";
-import { sendAssessmentReport } from "../services/api";
 
 import FailureCard from "../components/assessment/results/FailureCard";
 
@@ -72,27 +71,13 @@ export default function ResultsScreen({ onReset, currencySymbol, currencyCode, o
 
   const [showHelp, setShowHelp] = useState(false);
 
-  // Email Modal State
-  const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
-  const [emailValue, setEmailValue] = useState("");
-  const [isSending, setIsSending] = useState(false);
-
-  const handleSendEmail = async () => {
-    if (!emailValue) return;
-    setIsSending(true);
-    try {
-      const id = data?.assessment_id || "placeholder_id";
-      await sendAssessmentReport(id, emailValue);
-      alert("Report sent to your email successfully!");
-      setIsEmailModalOpen(false);
-      setEmailValue("");
-    } catch (err) {
-      console.error(err);
-      alert("Failed to send report. Please ensure the backend is running and configured correctly.");
-    } finally {
-      setIsSending(false);
-    }
-  };
+  // Fallback missing feature handlers
+  const handleFeatureUnavailable = () => {
+    alert("Report download temporarily unavailable. Please screenshot your results.");
+  }
+  const handleEmailUnavailable = () => {
+    alert("Email sending is temporarily unavailable. Please screenshot your results.");
+  }
 
   if (!ok) {
     return (
@@ -140,20 +125,14 @@ export default function ResultsScreen({ onReset, currencySymbol, currencyCode, o
 
           <div className="flex flex-col sm:flex-row w-full max-w-2xl gap-4">
             <button
-              onClick={() => {
-                if (data?.report_url) {
-                  window.open(data.report_url, "_blank");
-                } else {
-                  alert("The report PDF URL is not available. The backend needs to supply 'report_url' in its response.");
-                }
-              }}
+              onClick={handleFeatureUnavailable}
               className="flex-1 flex items-center justify-center gap-2 bg-[#2E7D32] text-white py-4 rounded-xl font-bold hover:bg-[#1B5E20] transition-colors shadow-lg"
             >
               <span className="material-icons-outlined text-[18px]">download</span>
               Download Detailed Report
             </button>
             <button
-              onClick={() => setIsEmailModalOpen(true)}
+              onClick={handleEmailUnavailable}
               className="flex-1 flex items-center justify-center gap-2 bg-white text-[#2E7D32] border border-[#2E7D32] py-4 rounded-xl font-bold hover:bg-gray-50 transition-colors"
             >
               <span className="material-icons-outlined text-[18px]">email</span>
@@ -163,47 +142,6 @@ export default function ResultsScreen({ onReset, currencySymbol, currencyCode, o
         </div>
 
       </div>
-
-      {/* Email Modal */}
-      {isEmailModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 animate-fade-in">
-          <div className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl animate-scale-up">
-            <h2 className="text-xl font-bold text-gray-900 mb-2">Send Report to Email</h2>
-            <p className="text-sm text-gray-500 mb-6">Enter your email address to receive a detailed PDF breakdown of this solar assessment.</p>
-
-            <input
-              type="email"
-              placeholder="name@company.com"
-              className="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-3 outline-none focus:border-[#00A190] focus:ring-1 focus:ring-[#00A190] mb-6"
-              value={emailValue}
-              onChange={(e) => setEmailValue(e.target.value)}
-            />
-
-            <div className="flex gap-4">
-              <button
-                onClick={() => setIsEmailModalOpen(false)}
-                className="flex-1 py-3 text-gray-500 font-bold hover:bg-gray-50 rounded-xl transition-colors"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleSendEmail}
-                disabled={isSending || !emailValue}
-                className="flex-1 py-3 bg-[#00A190] text-white font-bold rounded-xl transition-colors disabled:opacity-50 flex justify-center items-center gap-2"
-              >
-                {isSending ? (
-                  <>
-                    <span className="material-icons-outlined animate-spin text-[18px]">autorenew</span>
-                    Sending...
-                  </>
-                ) : (
-                  "Send Report"
-                )}
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
