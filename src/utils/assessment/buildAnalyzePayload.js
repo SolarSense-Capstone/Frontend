@@ -43,8 +43,8 @@ export default function buildAnalyzePayload(formData) {
   const country = (formData?.location?.country || "").trim();
   const city = (formData?.location?.city || "").trim();
 
-  const latitude = toNumberOrFallback(formData?.location?.latitude, 6.4969);
-  const longitude = toNumberOrFallback(formData?.location?.longitude, 3.3553);
+  const latitude = toNumberOrFallback(formData?.location?.latitude, null);
+  const longitude = toNumberOrFallback(formData?.location?.longitude, null);
 
   const rawType = String(formData?.businessType || "").trim();
   const typeKey = rawType.toLowerCase();

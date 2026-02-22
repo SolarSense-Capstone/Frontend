@@ -11,7 +11,7 @@ import CostAndEnergyMixRow from "../components/assessment/results/Dashboard/Cost
 import ProjectionAndSeasonalityRow from "../components/assessment/results/Dashboard/ProjectionAndSeasonalityRow";
 
 // Helper to convert known money-related fields from backend USD to local
-const mapDataToLocalCurrency = (data, currencyCode) => {
+const mapDataToLocalCurrency = (data, currencyCode, currencySymbol) => {
   if (!data || !currencyCode) return data;
 
   const mapped = { ...data };
@@ -57,6 +57,11 @@ const mapDataToLocalCurrency = (data, currencyCode) => {
     });
   }
 
+  // Replace "$" with local currency symbol in explanation if it exists
+  if (mapped.explanation && typeof mapped.explanation === 'string') {
+    mapped.explanation = mapped.explanation.replace(/\$/g, currencySymbol);
+  }
+
   return mapped;
 };
 
@@ -66,8 +71,8 @@ export default function ResultsScreen({ onReset, currencySymbol, currencyCode, o
 
   // Apply conversion strictly for display
   const data = useMemo(() => {
-    return ok && outcome?.data ? mapDataToLocalCurrency(outcome.data, currencyCode) : null;
-  }, [ok, outcome?.data, currencyCode]);
+    return ok && outcome?.data ? mapDataToLocalCurrency(outcome.data, currencyCode, currencySymbol) : null;
+  }, [ok, outcome?.data, currencyCode, currencySymbol]);
 
   const [showHelp, setShowHelp] = useState(false);
 
@@ -102,7 +107,7 @@ export default function ResultsScreen({ onReset, currencySymbol, currencyCode, o
       <div className="max-w-[1200px] mx-auto w-full space-y-6 animate-slide-up opacity-0">
 
         {/* Top Verdict Section */}
-        <VerdictSection data={data} score={score} />
+        <VerdictSection data={data} score={score} currencySymbol={currencySymbol} />
 
         {/* 4 Metrics Row */}
         <MetricsRow data={data} currencySymbol={currencySymbol} />

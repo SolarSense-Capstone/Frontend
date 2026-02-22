@@ -1,6 +1,8 @@
 import React from 'react';
 
-export default function VerdictSection({ data, score }) {
+import formatMoney from "../../../../utils/format/formatMoney";
+
+export default function VerdictSection({ data, score, currencySymbol }) {
     // Score mapping logic
     const normalizedScore = typeof score === 'number' ? score : (data?.viability_score || 0);
 
@@ -9,6 +11,11 @@ export default function VerdictSection({ data, score }) {
     const strokeWidth = 12;
     const circumference = Math.PI * radius; // length of half circle
     const strokeDashoffset = circumference - (normalizedScore / 100) * circumference;
+
+    // Generate dynamic explanation overriding the static backend response.
+    const customExplanation = data?.monthly_savings
+        ? `Your energy usage patterns provide a strong case for solar implementation. Transitioning to a solar-hybrid system can drastically reduce OPEX, with estimated savings of ${formatMoney(data.monthly_savings, currencySymbol)} per month, and mitigate the risk of grid instability or fuel price volatility.`
+        : (data?.explanation || "Your energy usage patterns provide a strong case for solar implementation. Transitioning to a solar-hybrid system can drastically reduce OPEX and mitigate the risk of grid instability or fuel price volatility.");
 
     return (
         <div className="bg-white rounded-[2rem] p-8 md:p-10 shadow-sm border border-gray-100 flex flex-col md:flex-row items-center justify-between overflow-hidden relative">
@@ -24,7 +31,7 @@ export default function VerdictSection({ data, score }) {
                 <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 tracking-tight">Solar Viability Verdict</h2>
 
                 <p className="text-gray-600 leading-relaxed text-sm md:text-base">
-                    {data?.explanation || "Your energy usage patterns provide a strong case for solar implementation. Transitioning to a solar-hybrid system can drastically reduce OPEX and mitigate the risk of grid instability or fuel price volatility."}
+                    {customExplanation}
                 </p>
 
                 <div className="mt-6 flex items-center gap-2 text-xs font-semibold text-gray-500">
