@@ -93,7 +93,7 @@ export default function ReviewScreen({ data, onContinue, onBack }) {
                     <div key={idx} className="flex justify-between items-center py-4 px-5 bg-[#F9FAFB] rounded-xl border border-gray-100/50">
                       <span className="font-bold text-gray-900 text-sm">{eq.label}</span>
                       <div className="text-right">
-                        <p className="font-bold text-[#2E7D32] text-sm">{eq.quantity} unit{eq.quantity > 1 ? 's' : ''}</p>
+                        <p className="font-bold text-[#2E7D32] text-sm">{eq.quantity} unit{eq.quantity > 1 ? "s" : ""}</p>
                         <p className="text-gray-400 text-xs mt-0.5">{eq.hoursPerDay} hrs/day</p>
                       </div>
                     </div>
@@ -115,6 +115,7 @@ export default function ReviewScreen({ data, onContinue, onBack }) {
           </div>
 
         </div>
+      </div>
 
         {/* Sticky Actions */}
         <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 px-6 py-4 flex gap-3">

@@ -40,6 +40,11 @@ const mapDataToLocalCurrency = (data, currencyCode) => {
     });
   }
 
+  // Replace "$" with local currency symbol in explanation if it exists
+  if (mapped.explanation && typeof mapped.explanation === 'string') {
+    mapped.explanation = mapped.explanation.replace(/\$/g, currencySymbol);
+  }
+
   return mapped;
 };
 
@@ -47,8 +52,8 @@ export default function ResultsScreen({ onReset, currencySymbol, currencyCode, o
   const ok = outcome?.ok;
 
   const data = useMemo(() => {
-    return ok && outcome?.data ? mapDataToLocalCurrency(outcome.data, currencyCode) : null;
-  }, [ok, outcome?.data, currencyCode]);
+    return ok && outcome?.data ? mapDataToLocalCurrency(outcome.data, currencyCode, currencySymbol) : null;
+  }, [ok, outcome?.data, currencyCode, currencySymbol]);
 
   const [showHelp, setShowHelp] = useState(false);
 

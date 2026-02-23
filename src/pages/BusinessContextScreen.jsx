@@ -3,6 +3,7 @@ import StepIntro from "../components/assessment/business-context/StepIntro";
 import BackNav from "../components/common/BackNav";
 import BusinessTypeGrid from "../components/assessment/business-context/BusinessTypeGrid";
 import StickyContinue from "../components/common/StickyContinue";
+import ProgressBar from "../components/common/ProgressBar";
 
 const BUSINESS_TYPES = [
   {
@@ -43,14 +44,11 @@ const BUSINESS_TYPES = [
   },
 ];
 
-import ProgressBar from "../components/common/ProgressBar";
-
 export default function BusinessContextScreen({ initialType = "", onContinue, onBack }) {
   const initialSelected = BUSINESS_TYPES.find(t => t.backendValue === initialType)?.id || null;
   const [selectedId, setSelectedId] = useState(initialSelected);
 
   const canContinue = !!selectedId;
-
   const selectedType = BUSINESS_TYPES.find((t) => t.id === selectedId);
 
   return (

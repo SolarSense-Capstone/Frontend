@@ -1,5 +1,4 @@
 import React from "react";
-import Typography from "../../../components/ui/Typography";
 import ScenarioOption from "./ScenarioOption";
 
 export default function ScenarioSelector({

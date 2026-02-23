@@ -37,13 +37,11 @@ export default function BusinessLocationScreen({
     onContinue,
     onBack,
 }) {
-    // Location States
     const [country, setCountry] = useState(initialLocation?.country || "");
     const [state, setState] = useState(initialLocation?.state || "");
     const [city, setCity] = useState(initialLocation?.city || "");
     const [address, setAddress] = useState(initialLocation?.address || "");
 
-    // Energy States
     const [scenario, setScenario] = useState(initialEnergy?.energy_scenario || null);
     const [dieselHoursPerDay, setDieselHoursPerDay] = useState(
         initialEnergy?.diesel?.hours_per_day || ""
@@ -57,7 +55,6 @@ export default function BusinessLocationScreen({
     const currencyCode = selectedCountry ? selectedCountry.code : "";
 
     const showDiesel = scenario === "diesel_replacement";
-
     const isLocationValid = country && city;
 
     const isEnergyValid = useMemo(() => {
@@ -76,7 +73,33 @@ export default function BusinessLocationScreen({
     const handleContinue = () => {
         if (!isValid) return;
 
-        const locationObj = { country, state, city, address };
+        const normalizedCity = city.trim();
+        let coords = CITY_COORDINATES[normalizedCity];
+
+        // If city not found, fallback to country capitals to avoid sending Lagos for everyone
+        if (!coords) {
+            const countryDefaults = {
+                "Nigeria": CITY_COORDINATES["Lagos"],
+                "Ghana": CITY_COORDINATES["Accra"],
+                "Kenya": CITY_COORDINATES["Nairobi"],
+                "South Africa": CITY_COORDINATES["Johannesburg"],
+                "Ethiopia": { lat: 9.0054, lng: 38.7636 }, // Addis Ababa
+                "Uganda": { lat: 0.3476, lng: 32.5825 }, // Kampala
+                "Tanzania": { lat: -6.7924, lng: 39.2083 }, // Dar es Salaam
+                "Rwanda": { lat: -1.9441, lng: 30.0619 }, // Kigali
+            };
+            coords = countryDefaults[country] || CITY_COORDINATES["Lagos"];
+        }
+
+        const locationObj = {
+            country,
+            state,
+            city,
+            address,
+            latitude: coords.lat,
+            longitude: coords.lng
+        };
+
         const energyObj = {
             energy_scenario: scenario,
             uses_diesel: scenario === "diesel_replacement",
@@ -89,7 +112,6 @@ export default function BusinessLocationScreen({
                     }
                     : null,
         };
-
         onContinue({
             location: locationObj,
             energy: energyObj,
@@ -100,8 +122,8 @@ export default function BusinessLocationScreen({
     return (
         <div className="flex-1 flex flex-col bg-[#F9FAFB] px-6 pt-12 md:pt-24 pb-32 md:pb-40">
             <div className="max-w-xl mx-auto w-full">
-                <BackNav onBack={onBack} />
                 <ProgressBar step={3} totalSteps={5} />
+                <BackNav onBack={onBack} />
 
                 {/* --- LOCATION SECTION --- */}
                 <div className="mb-12">

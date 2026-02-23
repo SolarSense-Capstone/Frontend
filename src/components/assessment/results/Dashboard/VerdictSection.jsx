@@ -1,6 +1,8 @@
 import React from 'react';
 
-export default function VerdictSection({ data, score }) {
+import formatMoney from "../../../../utils/format/formatMoney";
+
+export default function VerdictSection({ data, score, currencySymbol }) {
     // Score mapping logic
     const normalizedScore = typeof score === 'number' ? score : (data?.viability_score || 0);
 
@@ -28,6 +30,11 @@ export default function VerdictSection({ data, score }) {
     const strokeWidth = 12;
     const circumference = Math.PI * radius; // length of half circle
     const strokeDashoffset = circumference - (normalizedScore / 100) * circumference;
+
+    // Generate dynamic explanation overriding the static backend response.
+    const customExplanation = data?.monthly_savings
+        ? `Your energy usage patterns provide a strong case for solar implementation. Transitioning to a solar-hybrid system can drastically reduce OPEX, with estimated savings of ${formatMoney(data.monthly_savings, currencySymbol)} per month, and mitigate the risk of grid instability or fuel price volatility.`
+        : (data?.explanation || "Your energy usage patterns provide a strong case for solar implementation. Transitioning to a solar-hybrid system can drastically reduce OPEX and mitigate the risk of grid instability or fuel price volatility.");
 
     return (
         <div className="bg-white rounded-3xl p-8 md:p-10 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.05)] border border-gray-50 flex flex-col md:flex-row items-center justify-between overflow-hidden relative">

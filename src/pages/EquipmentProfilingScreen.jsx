@@ -27,6 +27,7 @@ const EQUIPMENT_TYPES = [
   },
   {
     id: "displayCoolers",
+
     label: "Display Coolers",
     icon: "door_sliding",
     iconBg: "bg-sky-50",
@@ -83,8 +84,8 @@ export default function EquipmentProfilingScreen({ initialEquipment, onContinue,
   return (
     <div className="flex-1 flex flex-col bg-[#F9FAFB] px-6 pt-12 md:pt-20 pb-32 md:pb-40">
       <div className="max-w-2xl mx-auto w-full">
-        <BackNav onBack={onBack} />
         <ProgressBar step={4} totalSteps={5} />
+        <BackNav onBack={onBack} />
 
         <div className="text-center mb-8">
           <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
@@ -137,6 +138,7 @@ export default function EquipmentProfilingScreen({ initialEquipment, onContinue,
                       </button>
                     </div>
                   </div>
+                </div>
 
                   {/* Hours Per Day */}
                   <div className="flex flex-col items-center gap-2">
