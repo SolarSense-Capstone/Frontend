@@ -7,7 +7,7 @@ import StickyContinue from "../components/common/StickyContinue";
 const BUSINESS_TYPES = [
   {
     id: "frozen_food_retail",
-    backendValue: "frozen_food_retail",
+    backendValue: "Retail",
     label: "Frozen Food Retail",
     icon: "ac_unit",
   },
@@ -19,7 +19,7 @@ const BUSINESS_TYPES = [
   },
   {
     id: "cold_storage",
-    backendValue: "cold_storage",
+    backendValue: "Retail",
     label: "Cold Storage",
     icon: "kitchen",
   },
@@ -39,7 +39,7 @@ const BUSINESS_TYPES = [
     id: "bakery",
     backendValue: "Bakery",
     label: "Bakery",
-    icon: "balance",
+    icon: "bakery",
   },
 ];
 

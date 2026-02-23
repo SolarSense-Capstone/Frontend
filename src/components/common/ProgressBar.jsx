@@ -5,7 +5,7 @@ export default function ProgressBar({ step, totalSteps }) {
 
     return (
         <div className="w-full max-w-2xl mx-auto mb-8 animate-fade-in">
-            <div className="flex justify-between items-center mb-2 text-xs font-bold text-gray-500 uppercase tracking-widest">
+            <div className="flex justify-between items-center mb-2 text-[10px] font-bold text-gray-400 uppercase tracking-[0.15em]">
                 <span>Step {step} of {totalSteps}</span>
                 <span className="text-[#2E7D32]">{percentage}% Complete</span>
             </div>

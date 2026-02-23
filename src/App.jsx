@@ -7,6 +7,7 @@ import EquipmentProfilingScreen from "./pages/EquipmentProfilingScreen";
 import ReviewScreen from "./pages/ReviewScreen";
 import ProcessingAnalysisScreen from "./pages/ProcessingAnalysisScreen";
 import ResultsScreen from "./pages/ResultsScreen";
+import PrivacyNotice from "./components/common/PrivacyNotice";
 
 export default function App() {
   const [screen, setScreen] = useState("landing");
@@ -22,7 +23,7 @@ export default function App() {
       freezers: { quantity: 0, hoursPerDay: 0 },
       refrigerators: { quantity: 0, hoursPerDay: 0 },
       coldRoom: { quantity: 0, hoursPerDay: 0 },
-      displayChillers: { quantity: 0, hoursPerDay: 0 },
+      displayCoolers: { quantity: 0, hoursPerDay: 0 },
       iceMachines: { quantity: 0, hoursPerDay: 0 },
       lighting: { quantity: 0, hoursPerDay: 0 },
     },
@@ -46,7 +47,7 @@ export default function App() {
         freezers: { quantity: 0, hoursPerDay: 0 },
         refrigerators: { quantity: 0, hoursPerDay: 0 },
         coldRoom: { quantity: 0, hoursPerDay: 0 },
-        displayChillers: { quantity: 0, hoursPerDay: 0 },
+        displayCoolers: { quantity: 0, hoursPerDay: 0 },
         iceMachines: { quantity: 0, hoursPerDay: 0 },
         lighting: { quantity: 0, hoursPerDay: 0 },
       },
@@ -136,6 +137,9 @@ export default function App() {
           onReset={reset}
         />
       )}
+
+      {/* Privacy Notice — shown once per session (Checklist: UI > Privacy Notices) */}
+      <PrivacyNotice />
     </div>
   );
 }

@@ -8,12 +8,12 @@ export default function DieselDetails({
   currencySymbol,
 }) {
   return (
-    <div className="grid grid-cols-2 gap-4 animate-slide-up opacity-0">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8 animate-slide-up opacity-0">
       {/* Generator Hours Per Day */}
       <div>
         <label htmlFor="gen-hours" className="block mb-2 px-1">
-          <span className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">
-            Generator Hours Per Day
+          <span className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.15em]">
+            GENERATOR HOURS PER DAY
           </span>
         </label>
         <input
@@ -26,20 +26,20 @@ export default function DieselDetails({
             setDieselHoursPerDay(val);
           }}
           placeholder="1-24"
-          className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3.5 text-sm outline-none focus:ring-2 focus:ring-[#2E7D32]"
+          className="w-full bg-white border border-gray-100/80 rounded-xl px-4 py-3.5 text-[13px] outline-none shadow-sm focus:ring-2 focus:ring-[#2E7D32]"
         />
       </div>
 
       {/* Diesel Price Per Litre */}
       <div>
         <label htmlFor="diesel-price" className="block mb-2 px-1">
-          <span className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">
-            Diesel Price Per Litre
+          <span className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.15em]">
+            DIESEL PRICE PER LITRE
           </span>
         </label>
         <div className="relative">
           {currencySymbol && (
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm font-medium pointer-events-none">
+            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-[13px] font-bold pointer-events-none">
               {currencySymbol}
             </span>
           )}
@@ -53,7 +53,7 @@ export default function DieselDetails({
               setDieselPricePerLiter(val);
             }}
             placeholder="Price"
-            className={`w-full bg-white border border-gray-200 rounded-xl py-3.5 text-sm outline-none focus:ring-2 focus:ring-[#2E7D32] ${currencySymbol ? "pl-8 pr-4" : "px-4"
+            className={`w-full bg-white border border-gray-100/80 rounded-xl py-3.5 text-[13px] outline-none shadow-sm focus:ring-2 focus:ring-[#2E7D32] ${currencySymbol ? "pl-9 pr-4" : "px-4"
               }`}
           />
         </div>

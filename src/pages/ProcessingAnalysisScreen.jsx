@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import StepsCard from "../components/assessment/processing/StepsCard";
 import ErrorStateCard from "../components/assessment/processing/ErrorStateCard";
 import ProcessingHeader from "../components/assessment/processing/ProcessingHeader";
-import { analyzeAssessment } from "../services/api";
+import { analyzeAssessment, normalizeApiError } from "../services/api";
 import buildAnalyzePayload from "../utils/assessment/buildAnalyzePayload";
 
 const STEPS = [
@@ -36,21 +36,11 @@ export default function ProcessingAnalysisScreen({ onComplete, formData }) {
       } catch (err) {
         if (cancelled) return;
 
-        const status = err?.response?.status || err?.status || 0;
-        const body = err?.response?.data || err?.data || null;
-
-        console.log("ANALYZE ERROR STATUS:", status);
-        console.log("ANALYZE ERROR BODY:", body);
-        console.log("ANALYZE PAYLOAD SENT:", buildAnalyzePayload(formData));
-
+        // Use normalizeApiError for safe, user-friendly messages only
+        const normalized = normalizeApiError(err);
         setErrorState({
-          status,
-          message:
-            body?.message ||
-            body?.error ||
-            err.message ||
-            "Unable to complete analysis",
-          details: body,
+          status: normalized.status,
+          message: normalized.message,
         });
       }
     }

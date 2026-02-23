@@ -4,14 +4,14 @@ export default function ScenarioOption({ opt, selected, onSelect }) {
   return (
     <button
       onClick={() => onSelect(opt.id)}
-      className={`w-full text-left rounded-xl border transition-all duration-200 flex items-center gap-3 px-4 py-3.5 ${selected
-          ? "border-[#2E7D32] bg-white shadow-sm"
-          : "border-gray-200 bg-white hover:border-gray-300"
+      className={`w-full text-left rounded-xl border transition-all duration-200 flex items-center gap-3 px-5 py-4 ${selected
+        ? "border-2 border-[#2E7D32] bg-white shadow-sm"
+        : "border-gray-100 bg-white hover:border-gray-200"
         }`}
     >
       {/* Icon */}
       <span
-        className={`material-icons-outlined text-xl ${selected ? "text-[#2E7D32]" : "text-gray-500"
+        className={`material-icons-outlined text-[20px] ${selected ? "text-[#2E7D32]" : "text-[#9ca3af]"
           }`}
       >
         {opt.icon}
@@ -19,23 +19,18 @@ export default function ScenarioOption({ opt, selected, onSelect }) {
 
       {/* Label */}
       <span
-        className={`flex-1 text-sm font-medium ${selected ? "text-[#2E7D32]" : "text-gray-700"
+        className={`flex-1 text-[13px] font-bold ${selected ? "text-[#2E7D32]" : "text-[#4b5563]"
           }`}
       >
         {opt.label}
       </span>
 
       {/* Radio circle */}
-      <span
-        className={`w-5 h-5 rounded-full border-2 flex-shrink-0 flex items-center justify-center transition-all ${selected
-            ? "border-[#2E7D32] bg-white"
-            : "border-gray-300 bg-white"
-          }`}
-      >
+      <div className={`w-5 h-5 flex-shrink-0 rounded-full border-[1.5px] flex items-center justify-center transition-colors ${selected ? "border-[#2E7D32]" : "border-gray-300"}`}>
         {selected && (
-          <span className="w-3 h-3 rounded-full bg-[#2E7D32]" />
+          <div className="w-2.5 h-2.5 rounded-full bg-[#2E7D32]" />
         )}
-      </span>
+      </div>
     </button>
   );
 }

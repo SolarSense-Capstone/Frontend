@@ -10,11 +10,10 @@ export default function ScenarioSelector({
 }) {
   return (
     <>
-      <p className="text-lg font-bold text-gray-900 mb-4">
+      <p className="text-[22px] md:text-[28px] font-extrabold text-gray-900 mb-6 text-center">
         {label}
       </p>
-
-      <div className="grid grid-cols-1 gap-3">
+      <div className="grid grid-cols-1 gap-4">
         {scenarios.map((opt) => (
           <ScenarioOption
             key={opt.id}

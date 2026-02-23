@@ -1,24 +1,50 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/Solar Image.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined"
-      rel="stylesheet"
-    />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
 
-    <title>solarsense-ai-app</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- SEO & Identity -->
+  <title>SolarSense AI — Solar Viability Assessment</title>
+  <meta name="description"
+    content="Assess solar energy viability for your business with AI-powered analysis, 25-year projections, and tailored cost savings estimates." />
+  <meta name="robots" content="index, follow" />
+
+  <!-- Security: Referrer Policy (prevent leaking referrer info) -->
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+
+  <!-- Security: Content Security Policy -->
+  <!-- Allows: self, Google Fonts, and your API origin -->
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    script-src 'self';
+    style-src 'self' https://fonts.googleapis.com 'unsafe-inline';
+    font-src 'self' https://fonts.gstatic.com;
+    img-src 'self' data: https:;
+    connect-src 'self' https:;
+    object-src 'none';
+    base-uri 'self';
+    form-action 'self';
+  " />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/Solar Image.png" />
+
+  <!-- External Fonts: Google Fonts (crossorigin required for SRI compliance) -->
+  <!-- NOTE: CSS stylesheets from Google Fonts cannot have SRI because the content is dynamic.
+       However we use 'crossorigin' and restrict via CSP above to limit exposure. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet" crossorigin="anonymous" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet"
+    crossorigin="anonymous" />
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.jsx"></script>
+</body>
+
 </html>

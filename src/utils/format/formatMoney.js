@@ -1,7 +1,8 @@
-export default function formatMoney(value, currencySymbol = "$") {
+export default function formatMoney(value, currencySymbol = "$", decimals = 2) {
   if (value === null || value === undefined || Number.isNaN(Number(value)))
     return "—";
   return `${currencySymbol}${Number(value).toLocaleString(undefined, {
-    maximumFractionDigits: 2,
+    minimumFractionDigits: decimals,
+    maximumFractionDigits: decimals,
   })}`;
 }

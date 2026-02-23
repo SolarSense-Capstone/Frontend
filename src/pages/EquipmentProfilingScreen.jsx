@@ -26,7 +26,7 @@ const EQUIPMENT_TYPES = [
     iconColor: "text-purple-400",
   },
   {
-    id: "displayChillers",
+    id: "displayCoolers",
     label: "Display Coolers",
     icon: "door_sliding",
     iconBg: "bg-sky-50",
@@ -53,7 +53,7 @@ export default function EquipmentProfilingScreen({ initialEquipment, onContinue,
     freezers: { quantity: 0, hoursPerDay: 0 },
     refrigerators: { quantity: 0, hoursPerDay: 0 },
     coldRoom: { quantity: 0, hoursPerDay: 0 },
-    displayChillers: { quantity: 0, hoursPerDay: 0 },
+    displayCoolers: { quantity: 0, hoursPerDay: 0 },
     iceMachines: { quantity: 0, hoursPerDay: 0 },
     lighting: { quantity: 0, hoursPerDay: 0 },
   });
@@ -93,7 +93,7 @@ export default function EquipmentProfilingScreen({ initialEquipment, onContinue,
           <p className="text-gray-400 text-sm">Specify quantity and daily usage hours for each.</p>
         </div>
 
-        <div className="space-y-3">
+        <div className="space-y-4">
           {EQUIPMENT_TYPES.map(({ id, label, icon, iconBg, iconColor }) => {
             const itemState = equipment[id] || { quantity: 0, hoursPerDay: 0 };
             const q = itemState.quantity;
@@ -102,54 +102,60 @@ export default function EquipmentProfilingScreen({ initialEquipment, onContinue,
             return (
               <div
                 key={id}
-                className="bg-white px-5 py-4 rounded-xl border border-gray-100 shadow-sm flex items-center gap-4"
+                className="bg-white px-4 py-4 md:px-5 md:py-5 rounded-2xl border border-gray-100 shadow-sm flex flex-wrap md:flex-nowrap items-center gap-3 md:gap-4 transition-colors"
               >
                 {/* Icon */}
-                <div className={`w-10 h-10 rounded-xl ${iconBg} flex items-center justify-center flex-shrink-0`}>
-                  <span className={`material-icons-outlined text-xl ${iconColor}`}>
+                <div className={`w-10 h-10 md:w-12 md:h-12 rounded-xl ${iconBg} flex items-center justify-center flex-shrink-0`}>
+                  <span className={`material-icons-outlined text-[18px] md:text-[20px] ${iconColor}`}>
                     {icon}
                   </span>
                 </div>
 
                 {/* Label */}
-                <span className="flex-1 font-medium text-gray-800 text-sm">
+                <span className="flex-1 font-semibold text-[#1f2937] text-sm min-w-[80px]">
                   {label}
                 </span>
 
-                {/* Quantity */}
-                <div className="flex flex-col items-center gap-1">
-                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Quantity</span>
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={() => updateEquipment(id, 'quantity', Math.max(0, q - 1))}
-                      className="w-7 h-7 rounded-full border border-gray-200 text-gray-500 hover:bg-gray-50 active:bg-gray-100 flex items-center justify-center text-base font-medium"
-                    >
-                      −
-                    </button>
-                    <span className="w-6 text-center text-sm font-semibold text-gray-800">{q}</span>
-                    <button
-                      onClick={() => updateEquipment(id, 'quantity', q + 1)}
-                      className="w-7 h-7 rounded-full border border-gray-200 text-gray-500 hover:bg-gray-50 active:bg-gray-100 flex items-center justify-center text-base font-medium"
-                    >
-                      +
-                    </button>
+                {/* Right Side Controls */}
+                <div className="flex items-center gap-4 md:gap-6 ml-auto">
+                  {/* Quantity */}
+                  <div className="flex flex-col items-center gap-2">
+                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.15em]">QUANTITY</span>
+                    <div className="flex items-center justify-between border border-gray-100/80 rounded-full px-1 py-1 w-24">
+                      <button
+                        onClick={() => updateEquipment(id, 'quantity', Math.max(0, q - 1))}
+                        className="w-7 h-7 rounded-full text-gray-400 hover:bg-gray-50 active:bg-gray-100 flex items-center justify-center text-lg font-medium transition-colors"
+                      >
+                        −
+                      </button>
+                      <span className="text-center text-[13px] font-semibold text-gray-800">{q}</span>
+                      <button
+                        onClick={() => updateEquipment(id, 'quantity', q + 1)}
+                        className="w-7 h-7 rounded-full text-gray-400 hover:bg-gray-50 active:bg-gray-100 flex items-center justify-center text-lg font-medium transition-colors"
+                      >
+                        +
+                      </button>
+                    </div>
                   </div>
-                </div>
 
-                {/* Hours Per Day */}
-                <div className="flex flex-col items-center gap-1">
-                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest whitespace-nowrap">Hours Per Day</span>
-                  <input
-                    type="number"
-                    min="0"
-                    max="24"
-                    disabled={q === 0}
-                    value={h === 0 && q === 0 ? "" : h}
-                    onChange={(e) => updateEquipment(id, 'hoursPerDay', e.target.value)}
-                    placeholder="1-24"
-                    className={`w-16 px-2 py-1.5 border border-gray-200 rounded-lg text-sm text-center focus:ring-2 focus:ring-[#2E7D32] focus:border-[#2E7D32] outline-none ${q === 0 ? 'bg-gray-50 text-gray-400 cursor-not-allowed' : 'bg-white text-gray-800'
-                      }`}
-                  />
+                  {/* Hours Per Day */}
+                  <div className="flex flex-col items-center gap-2">
+                    <span className="text-[10px] font-bold text-gray-400 uppercase tracking-[0.15em] whitespace-nowrap">HOURS PER DAY</span>
+                    <input
+                      type="number"
+                      min="1"
+                      max="24"
+                      disabled={q === 0}
+                      value={q === 0 ? "" : (h === 0 ? "" : h)}
+                      onChange={(e) => {
+                        const parsed = parseInt(e.target.value, 10);
+                        const clamped = isNaN(parsed) ? 0 : Math.min(24, Math.max(0, parsed));
+                        updateEquipment(id, 'hoursPerDay', clamped);
+                      }}
+                      placeholder="1–24"
+                      className={`w-[72px] px-2 py-2 border border-gray-100/80 rounded-xl text-[13px] font-medium text-center focus:ring-2 focus:ring-[#2E7D32] focus:border-[#2E7D32] outline-none ${q === 0 ? 'bg-[#F9FAFB] text-gray-400 cursor-not-allowed hidden-arrows' : 'bg-[#F9FAFB] text-gray-800 hidden-arrows'}`}
+                    />
+                  </div>
                 </div>
               </div>
             );
