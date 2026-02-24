@@ -82,20 +82,22 @@ export default function EquipmentProfilingScreen({ initialEquipment, onContinue,
 
   return (
     <div className="flex-1 flex flex-col bg-[#F9FAFB] px-6 pt-12 md:pt-20 pb-32 md:pb-40">
-      <div className="max-w-[600px] mx-auto w-full">
-        <div className="mb-4">
+      <div className="max-w-2xl mx-auto w-full flex flex-col items-center">
+        <div className="w-full self-stretch mb-4">
+          <ProgressBar step={4} totalSteps={5} />
+        </div>
+        <div className="w-full self-start mb-4">
           <BackNav onBack={onBack} />
         </div>
-        <ProgressBar step={4} totalSteps={5} />
 
-        <div className="text-center my-8">
-          <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
+        <div className="w-full text-center my-8">
+          <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 mb-2">
             What equipment do you use daily?
           </h2>
-          <p className="text-gray-400 text-sm">Specify quantity and daily usage hours for each.</p>
+          <p className="text-gray-500 font-normal text-sm">Specify quantity and daily usage hours for each.</p>
         </div>
 
-        <div className="space-y-3">
+        <div className="space-y-3 w-full">
           {EQUIPMENT_TYPES.map(({ id, label, icon, iconBg, iconColor }) => {
             const itemState = equipment[id] || { quantity: 0, hoursPerDay: 0 };
             const q = itemState.quantity;
@@ -159,7 +161,7 @@ export default function EquipmentProfilingScreen({ initialEquipment, onContinue,
         </div>
       </div>
 
-      <StickyContinue canContinue={canContinue} onClick={() => onContinue(equipment)} maxWidthClass="max-w-[600px]" />
+      <StickyContinue canContinue={canContinue} onClick={() => onContinue(equipment)} maxWidthClass="max-w-2xl" />
     </div>
   );
 }

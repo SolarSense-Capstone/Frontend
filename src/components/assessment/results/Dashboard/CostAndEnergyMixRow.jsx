@@ -10,9 +10,31 @@ export default function CostAndEnergyMixRow({ data, currencySymbol }) {
     const newCostAnnual = Math.max(0, currentCostMonthly - monthlySavings) * 12;
     const annualSavings = monthlySavings * 12;
 
+    const systemCost = data?.system_cost || 0;
+    const paybackYears = annualSavings > 0 ? (systemCost / annualSavings).toFixed(1) : "0.0";
+
+    const coveragePercent = data?.estimated_consumption_kwh ? Math.round(((data?.predicted_generation_kwh || 0) / data.estimated_consumption_kwh) * 100) : 0;
+
+    const maxValue = Math.max(currentCostAnnual, newCostAnnual);
+    const minBarHeightThreshold = maxValue * 0.10; // 10% of max
+
+    const getDisplayHeight = (actualValue) => {
+        return Math.max(actualValue, minBarHeightThreshold);
+    };
+
     const comparisonData = [
-        { name: 'Current', value: currentCostAnnual },
-        { name: 'After Solar', value: newCostAnnual },
+        {
+            name: 'Current',
+            actualValue: currentCostAnnual,
+            value: getDisplayHeight(currentCostAnnual),
+            isMinimumApplied: currentCostAnnual < minBarHeightThreshold && currentCostAnnual === 0
+        },
+        {
+            name: 'After Solar',
+            actualValue: newCostAnnual,
+            value: getDisplayHeight(newCostAnnual),
+            isMinimumApplied: newCostAnnual < minBarHeightThreshold && newCostAnnual === 0
+        },
     ];
 
     const usesDiesel = data.energy_scenario === 'diesel_replacement';
@@ -32,6 +54,26 @@ export default function CostAndEnergyMixRow({ data, currencySymbol }) {
         { name: 'Grid', value: 100, color: '#FCD34D' }
     ];
 
+    const CustomBarTooltip = ({ active, payload }) => {
+        if (active && payload && payload.length) {
+            const dataPoint = payload[0].payload;
+            const isZero = dataPoint.actualValue === 0;
+
+            return (
+                <div className="bg-white p-3 border border-gray-100 shadow-lg rounded-lg max-w-xs z-50 relative">
+                    <p className="font-bold text-gray-900 mb-1">{dataPoint.name}</p>
+                    <p className="text-gray-700">Cost: {formatMoney(dataPoint.actualValue, currencySymbol)}</p>
+                    {isZero && dataPoint.isMinimumApplied && (
+                        <p className="text-xs text-gray-500 mt-2">
+                            * Cost is 0 because solar covers {coveragePercent}% of energy needs
+                        </p>
+                    )}
+                </div>
+            );
+        }
+        return null;
+    };
+
     return (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
 
@@ -48,6 +90,7 @@ export default function CostAndEnergyMixRow({ data, currencySymbol }) {
                             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" />
                             <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#9CA3AF' }} dy={10} />
                             <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#9CA3AF' }} dx={-10} tickFormatter={(val) => val >= 1000000 ? `${(val / 1000000).toFixed(1)}M` : val >= 1000 ? `${(val / 1000).toFixed(0)}k` : val} />
+                            <Tooltip content={<CustomBarTooltip />} cursor={{ fill: 'transparent' }} />
                             <Bar dataKey="value" radius={[4, 4, 0, 0]}>
                                 {
                                     comparisonData.map((entry, index) => (
@@ -72,6 +115,13 @@ export default function CostAndEnergyMixRow({ data, currencySymbol }) {
                         <span className="text-[10px] uppercase font-bold text-gray-400 tracking-widest block mb-1">Estimated Annual Savings</span>
                         <span className="text-lg font-black text-[#2E7D32]">{formatMoney(annualSavings, currencySymbol)}</span>
                     </div>
+                </div>
+
+                <div className="flex items-start gap-2 mt-4 text-sm text-gray-500">
+                    <span className="flex-shrink-0 mt-0.5">ℹ️</span>
+                    <p className="flex-1 leading-relaxed">
+                        Savings shown are annual operational cost reductions. System cost of {formatMoney(systemCost, currencySymbol)} is paid upfront. Break-even in {paybackYears} years.
+                    </p>
                 </div>
             </div>
 

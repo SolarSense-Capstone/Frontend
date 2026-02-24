@@ -73,21 +73,28 @@ export default function EnergyContextScreen({
       diesel:
         scenario === "diesel_replacement"
           ? {
-              hours_per_day: Number(dieselHoursPerDay),
-              price_per_liter: Number(dieselPricePerLiter),
-            }
+            hours_per_day: Number(dieselHoursPerDay),
+            price_per_liter: Number(dieselPricePerLiter),
+          }
           : null,
     });
   };
 
   return (
     <div className="flex-1 flex flex-col bg-[#F9FAFB] px-6 pt-12 md:pt-24 pb-32 md:pb-40">
-      <div className="max-w-xl mx-auto w-full">
-        <BackNav onBack={onBack} />
+      <div className="max-w-2xl mx-auto w-full flex flex-col items-center">
+        <div className="w-full self-stretch mb-4">
+          <ProgressBar step={4} totalSteps={5} />
+        </div>
+        <div className="w-full self-start mb-4">
+          <BackNav onBack={onBack} />
+        </div>
 
-        <StepHeader title="Power Supply & Energy Cost" />
+        <div className="w-full mb-10">
+          <StepHeader title="Power Supply & Energy Cost" />
+        </div>
 
-        <div className="space-y-10">
+        <div className="space-y-10 w-full">
           <div className="animate-slide-up opacity-0 animation-delay-100">
             <ScenarioSelector
               label="How does your business currently get electricity?"
@@ -117,7 +124,7 @@ export default function EnergyContextScreen({
         </div>
       </div>
 
-      <StickyContinue canContinue={isValid} onClick={handleContinue} />
+      <StickyContinue canContinue={isValid} onClick={handleContinue} maxWidthClass="max-w-2xl" />
     </div>
   );
 }

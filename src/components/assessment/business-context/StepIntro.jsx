@@ -6,7 +6,7 @@ export default function StepIntro({
   subtitle,
   className = "text-center mb-8 animate-slide-up opacity-0",
   titleVariant = "h2",
-  titleClassName = "mb-3 text-3xl font-bold",
+  titleClassName = "mb-3 text-2xl md:text-3xl font-semibold",
 }) {
   return (
     <div className={className}>

@@ -137,20 +137,20 @@ export default function BusinessLocationScreen({
 
     return (
         <div className="flex-1 flex flex-col bg-[#F9FAFB] px-6 pt-12 md:pt-24 pb-32 md:pb-40">
-            <div className="max-w-xl mx-auto w-full flex flex-col items-center">
+            <div className="max-w-2xl mx-auto w-full flex flex-col items-center">
+                <div className="w-full self-stretch mb-4">
+                    <ProgressBar step={3} totalSteps={5} />
+                </div>
                 <div className="w-full self-start mb-4">
                     <BackNav onBack={onBack} />
                 </div>
-                <div className="w-full self-stretch">
-                    <ProgressBar step={3} totalSteps={5} />
-                </div>
 
                 {/* LOCATION SECTION */}
-                <div className="mb-10 mt-4">
-                    <h2 className="text-2xl md:text-3xl font-bold text-gray-900 text-center mb-1">
+                <div className="mb-10 w-full mt-4">
+                    <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 text-center mb-2">
                         Where is your business located?
                     </h2>
-                    <p className="text-gray-400 text-sm text-center mb-8">
+                    <p className="text-gray-500 font-normal text-sm text-center mb-8">
                         Solar estimates are based on regional data.
                     </p>
 
@@ -225,7 +225,7 @@ export default function BusinessLocationScreen({
                 </div>
 
                 {/* ENERGY SECTION */}
-                <div>
+                <div className="w-full">
                     <ScenarioSelector
                         label="How does your business currently get electricity?"
                         scenarios={SCENARIOS}
@@ -247,7 +247,7 @@ export default function BusinessLocationScreen({
                 </div>
             </div>
 
-            <StickyContinue canContinue={isValid} onClick={handleContinue} />
+            <StickyContinue canContinue={isValid} onClick={handleContinue} maxWidthClass="max-w-2xl" />
         </div>
     );
 }
