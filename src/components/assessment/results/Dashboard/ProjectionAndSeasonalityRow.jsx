@@ -54,8 +54,8 @@ export default function ProjectionAndSeasonalityRow({ data }) {
                         <AreaChart data={projectionData} margin={{ top: 10, right: 0, left: -10, bottom: 0 }}>
                             <defs>
                                 <linearGradient id="colorGeneration" x1="0" y1="0" x2="0" y2="1">
-                                    <stop offset="5%" stopColor="#00A190" stopOpacity={0.1} />
-                                    <stop offset="95%" stopColor="#00A190" stopOpacity={0} />
+                                    <stop offset="5%" stopColor="#2E7D32" stopOpacity={0.1} />
+                                    <stop offset="95%" stopColor="#2E7D32" stopOpacity={0} />
                                 </linearGradient>
                             </defs>
                             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" />
@@ -77,7 +77,7 @@ export default function ProjectionAndSeasonalityRow({ data }) {
                             <Area
                                 type="monotone"
                                 dataKey="generation"
-                                stroke="#00A190"
+                                stroke="#2E7D32"
                                 strokeWidth={2}
                                 fillOpacity={1}
                                 fill="url(#colorGeneration)"
@@ -136,7 +136,7 @@ export default function ProjectionAndSeasonalityRow({ data }) {
                         </div>
                         <div className="mt-4 pt-4 border-t border-gray-100 flex justify-between items-center text-lg">
                             <span className="text-sm font-medium">LifeTime Total</span>
-                            <span className="font-black text-[#00A190]">{formatNumber(lifetimeTotal)} kWh</span>
+                            <span className="font-black text-[#2E7D32]">{formatNumber(lifetimeTotal)} kWh</span>
                         </div>
                     </div>
                 </div>

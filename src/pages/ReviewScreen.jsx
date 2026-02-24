@@ -2,11 +2,13 @@ import React from "react";
 import BackNav from "../components/common/BackNav";
 import ProgressBar from "../components/common/ProgressBar";
 
+import Button from "../components/ui/Button";
+
 const EQUIPMENT_LABELS = {
   freezers: "Freezers",
   refrigerators: "Refrigerators",
   coldRoom: "Cold Room",
-  displayChillers: "Display Coolers",
+  displayCoolers: "Display Coolers",
   iceMachines: "Ice Machines",
   lighting: "Lighting",
 };
@@ -27,12 +29,14 @@ export default function ReviewScreen({ data, onContinue, onBack }) {
 
   return (
     <div className="flex-1 flex flex-col bg-[#F9FAFB] px-6 pt-12 md:pt-20 pb-32 md:pb-40">
-      <div className="max-w-2xl mx-auto w-full">
+      <div className="max-w-2xl mx-auto w-full flex flex-col items-center">
 
-        <ProgressBar step={5} totalSteps={5} />
-
-        <div className="mb-4">
+        <div className="w-full self-start mb-4">
           <BackNav onBack={onBack} />
+        </div>
+
+        <div className="w-full self-stretch">
+          <ProgressBar step={5} totalSteps={5} />
         </div>
 
         <div className="text-center mb-8 animate-slide-up opacity-0">
@@ -117,15 +121,25 @@ export default function ReviewScreen({ data, onContinue, onBack }) {
         </div>
       </div>
 
-      {/* Sticky Start Analysis Button */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 px-6 py-4">
-        <button
-          onClick={onContinue}
-          className="w-full max-w-lg mx-auto flex px-8 py-4 font-bold text-white bg-[#2E7D32] rounded-xl items-center justify-center gap-2 hover:bg-[#1B5E20] transition-colors"
-        >
-          Start Analysis
-          <span className="material-icons-outlined text-sm">equalizer</span>
-        </button>
+      {/* Sticky Start Analysis & Edit Buttons */}
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 px-6 py-4 z-50 animate-fade-in">
+        <div className="w-full max-w-2xl mx-auto flex flex-row gap-3">
+          <Button
+            variant="outline"
+            onClick={onBack}
+            className="w-1/2 py-4 font-bold border-2"
+          >
+            Edit details
+          </Button>
+          <Button
+            variant="primary"
+            onClick={onContinue}
+            className="w-1/2 py-4 font-bold rounded-xl"
+            icon="equalizer"
+          >
+            Start Analysis
+          </Button>
+        </div>
       </div>
     </div>
   );
