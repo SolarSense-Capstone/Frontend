@@ -72,17 +72,9 @@ export default function ResultsScreen({ onReset, currencySymbol, currencyCode, o
   // Apply conversion strictly for display
   const data = useMemo(() => {
     return ok && outcome?.data ? mapDataToLocalCurrency(outcome.data, currencyCode, currencySymbol) : null;
-  }, [ok, outcome?.data, currencyCode, currencySymbol]);
+  }, [ok, outcome, currencyCode, currencySymbol]);
 
   const [showHelp, setShowHelp] = useState(false);
-
-  // Fallback missing feature handlers
-  const handleFeatureUnavailable = () => {
-    alert("Report download temporarily unavailable. Please screenshot your results.");
-  }
-  const handleEmailUnavailable = () => {
-    alert("Email sending is temporarily unavailable. Please screenshot your results.");
-  }
 
   if (!ok) {
     return (

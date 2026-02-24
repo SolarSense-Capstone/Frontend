@@ -1,6 +1,25 @@
 import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, PieChart, Pie, Cell, Tooltip } from 'recharts';
 import formatMoney from "../../../../utils/format/formatMoney";
+const CustomBarTooltip = ({ active, payload, currencySymbol, coveragePercent }) => {
+    if (active && payload && payload.length) {
+        const dataPoint = payload[0].payload;
+        const isZero = dataPoint.actualValue === 0;
+
+        return (
+            <div className="bg-white p-3 border border-gray-100 shadow-lg rounded-lg max-w-xs z-50 relative">
+                <p className="font-bold text-gray-900 mb-1">{dataPoint.name}</p>
+                <p className="text-gray-700">Cost: {formatMoney(dataPoint.actualValue, currencySymbol)}</p>
+                {isZero && dataPoint.isMinimumApplied && (
+                    <p className="text-xs text-gray-500 mt-2">
+                        * Cost is 0 because solar covers {coveragePercent > 100 ? '100%+' : `${coveragePercent}%`} of energy needs
+                    </p>
+                )}
+            </div>
+        );
+    }
+    return null;
+};
 
 export default function CostAndEnergyMixRow({ data, currencySymbol }) {
     const currentCostMonthly = data?.current_energy_cost?.total_monthly || 0;
@@ -54,26 +73,6 @@ export default function CostAndEnergyMixRow({ data, currencySymbol }) {
         { name: 'Grid', value: 100, color: '#FCD34D' }
     ];
 
-    const CustomBarTooltip = ({ active, payload }) => {
-        if (active && payload && payload.length) {
-            const dataPoint = payload[0].payload;
-            const isZero = dataPoint.actualValue === 0;
-
-            return (
-                <div className="bg-white p-3 border border-gray-100 shadow-lg rounded-lg max-w-xs z-50 relative">
-                    <p className="font-bold text-gray-900 mb-1">{dataPoint.name}</p>
-                    <p className="text-gray-700">Cost: {formatMoney(dataPoint.actualValue, currencySymbol)}</p>
-                    {isZero && dataPoint.isMinimumApplied && (
-                        <p className="text-xs text-gray-500 mt-2">
-                            * Cost is 0 because solar covers {coveragePercent}% of energy needs
-                        </p>
-                    )}
-                </div>
-            );
-        }
-        return null;
-    };
-
     return (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
 
@@ -90,7 +89,7 @@ export default function CostAndEnergyMixRow({ data, currencySymbol }) {
                             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" />
                             <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#9CA3AF' }} dy={10} />
                             <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#9CA3AF' }} dx={-10} tickFormatter={(val) => val >= 1000000 ? `${(val / 1000000).toFixed(1)}M` : val >= 1000 ? `${(val / 1000).toFixed(0)}k` : val} />
-                            <Tooltip content={<CustomBarTooltip />} cursor={{ fill: 'transparent' }} />
+                            <Tooltip content={<CustomBarTooltip currencySymbol={currencySymbol} coveragePercent={coveragePercent} />} cursor={{ fill: 'transparent' }} />
                             <Bar dataKey="value" radius={[4, 4, 0, 0]}>
                                 {
                                     comparisonData.map((entry, index) => (
@@ -123,10 +122,10 @@ export default function CostAndEnergyMixRow({ data, currencySymbol }) {
                         Savings shown are annual operational cost reductions. System cost of {formatMoney(systemCost, currencySymbol)} is paid upfront. Break-even in {paybackYears} years.
                     </p>
                 </div>
-            </div>
+            </div >
 
             {/* Energy Mix Breakdown - 1/3 */}
-            <div className="lg:col-span-1 bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-gray-100 flex flex-col">
+            < div className="lg:col-span-1 bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-gray-100 flex flex-col" >
                 <h3 className="text-lg font-bold text-gray-900 mb-6">Energy Mix Breakdown</h3>
 
                 <div className="flex-1 flex flex-col items-center justify-center">
@@ -165,20 +164,22 @@ export default function CostAndEnergyMixRow({ data, currencySymbol }) {
                     </div>
                 </div>
 
-                {usesDiesel && data.diesel_details && (
-                    <div className="mt-6 pt-4 border-t border-gray-100 flex justify-between items-end">
-                        <div>
-                            <span className="text-[9px] uppercase font-bold text-gray-400 tracking-widest block mb-1">Diesel Cost</span>
-                            <span className="text-xs font-bold text-gray-900">{formatMoney(data.diesel_details.price_per_liter, currencySymbol)}/L</span>
+                {
+                    usesDiesel && data.diesel_details && (
+                        <div className="mt-6 pt-4 border-t border-gray-100 flex justify-between items-end">
+                            <div>
+                                <span className="text-[9px] uppercase font-bold text-gray-400 tracking-widest block mb-1">Diesel Cost</span>
+                                <span className="text-xs font-bold text-gray-900">{formatMoney(data.diesel_details.price_per_liter, currencySymbol)}/L</span>
+                            </div>
+                            <div className="text-right">
+                                <span className="text-[9px] uppercase font-bold text-gray-400 tracking-widest block mb-1">Monthly Litres</span>
+                                <span className="text-xs font-bold text-gray-900">{data.diesel_details.monthly_liters.toFixed(0)} L</span>
+                            </div>
                         </div>
-                        <div className="text-right">
-                            <span className="text-[9px] uppercase font-bold text-gray-400 tracking-widest block mb-1">Monthly Litres</span>
-                            <span className="text-xs font-bold text-gray-900">{data.diesel_details.monthly_liters.toFixed(0)} L</span>
-                        </div>
-                    </div>
-                )}
-            </div>
+                    )
+                }
+            </div >
 
-        </div>
+        </div >
     );
 }

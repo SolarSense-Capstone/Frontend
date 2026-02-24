@@ -21,7 +21,7 @@ export default function ReviewScreen({ data, onContinue, onBack }) {
     : "Fully on grid";
 
   const activeEquipment = Object.entries(equipment || {})
-    .filter(([_, item]) => item.quantity > 0)
+    .filter((entry) => entry[1].quantity > 0)
     .map(([key, item]) => ({
       label: EQUIPMENT_LABELS[key] || key,
       ...item

@@ -17,7 +17,7 @@ export default function CoverageAndFinancialRow({ data, currencySymbol }) {
             <div className="lg:col-span-2 bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-gray-100 flex flex-col justify-center">
                 <div className="flex justify-between items-center mb-6">
                     <h3 className="text-lg font-bold text-gray-900">Solar Coverage Analysis</h3>
-                    <span className="text-xs font-bold text-[#2E7D32] bg-[#EEFbf4] px-2 py-1 rounded-md">{coveragePercent}% Coverage</span>
+                    <span className="text-xs font-bold text-[#2E7D32] bg-[#EEFbf4] px-2 py-1 rounded-md">{coveragePercent > 100 ? '100%+' : coveragePercent + '%'} Coverage</span>
                 </div>
 
                 <div className="relative w-full h-4 bg-gray-100 rounded-full overflow-hidden mb-4">
@@ -28,7 +28,9 @@ export default function CoverageAndFinancialRow({ data, currencySymbol }) {
                 </div>
 
                 <div className="flex justify-between items-center text-xs text-gray-400 font-medium">
-                    <span className="uppercase tracking-widest text-[#2E7D32] font-bold">Solar can cover {coveragePercent}% of your energy needs</span>
+                    <span className="uppercase tracking-widest text-[#2E7D32] font-bold">
+                        {coveragePercent > 100 ? 'Solar covers 100%+ of your energy needs' : `Solar can cover ${coveragePercent}% of your energy needs`}
+                    </span>
                     <span>{formatNumber(data.predicted_generation_kwh)} / {formatNumber(data.estimated_consumption_kwh)} kWh</span>
                 </div>
                 <p className="text-[10px] text-gray-400 mt-2">Based on estimated consumption and projected generation.</p>

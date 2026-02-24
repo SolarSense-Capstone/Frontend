@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import BackNav from "../components/common/BackNav";
 import StickyContinue from "../components/common/StickyContinue";
 import StepHeader from "../components/assessment/equipment-pattern/StepHeader";
@@ -11,6 +11,13 @@ const EquipmentPatternScreen = ({ onContinue, onBack }) => {
   const [fridgeCount, setFridgeCount] = useState(1);
   const [opHours, setOpHours] = useState(12);
   const [monthlyCost, setMonthlyCost] = useState("");
+
+  const isValid = useMemo(() => {
+    if (!monthlyCost || isNaN(Number(monthlyCost)) || Number(monthlyCost) <= 0) return false;
+    if (fridgeCount <= 0) return false;
+    if (opHours <= 0 || opHours > 24) return false;
+    return true;
+  }, [monthlyCost, fridgeCount, opHours]);
 
   const handleContinue = () => {
     onContinue(fridgeCount, opHours, monthlyCost);

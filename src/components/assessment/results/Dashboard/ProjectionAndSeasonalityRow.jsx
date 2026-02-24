@@ -1,6 +1,37 @@
 import React from 'react';
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, ResponsiveContainer, BarChart, Bar, Cell } from 'recharts';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, ResponsiveContainer, BarChart, Bar, Cell, Tooltip } from 'recharts';
 import formatNumber from "../../../../utils/format/formatNumber";
+
+const CustomProjectionTooltip = ({ active, payload }) => {
+    if (active && payload && payload.length) {
+        const data = payload[0].payload;
+        return (
+            <div className="bg-white border border-gray-100 p-3 shadow-xl rounded-xl">
+                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Year {data.year}</p>
+                <div className="flex items-center gap-2">
+                    <p className="text-sm font-bold text-[#2E7D32]">{formatNumber(data.generation)} <span className="text-xs text-gray-500 font-normal">kWh</span></p>
+                </div>
+            </div>
+        );
+    }
+    return null;
+};
+
+const CustomSeasonalityTooltip = ({ active, payload }) => {
+    if (active && payload && payload.length) {
+        const data = payload[0].payload;
+        return (
+            <div className="bg-white border border-gray-100 p-3 shadow-xl rounded-xl">
+                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">{data.name}</p>
+                <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 rounded-full" style={{ backgroundColor: data.isDry ? '#F59E0B' : '#3B82F6' }}></div>
+                    <p className="text-sm font-bold text-gray-900">{formatNumber(data.generation)} <span className="text-xs text-gray-500 font-normal">kWh/day</span></p>
+                </div>
+            </div>
+        );
+    }
+    return null;
+};
 
 export default function ProjectionAndSeasonalityRow({ data }) {
     const defaultData = {
@@ -74,6 +105,7 @@ export default function ProjectionAndSeasonalityRow({ data }) {
                                 dx={-10}
                                 tickFormatter={(val) => val >= 1000 ? `${(val / 1000).toFixed(0)}k` : val}
                             />
+                            <Tooltip content={<CustomProjectionTooltip />} cursor={{ stroke: '#2E7D32', strokeWidth: 1, strokeDasharray: '3 3', fill: 'transparent' }} />
                             <Area
                                 type="monotone"
                                 dataKey="generation"
@@ -102,7 +134,15 @@ export default function ProjectionAndSeasonalityRow({ data }) {
 
                     <div className="flex-1 w-full min-h-[140px]">
                         <ResponsiveContainer width="100%" height="100%">
-                            <BarChart data={seasonalityData}>
+                            <BarChart data={seasonalityData} margin={{ top: 10, right: 0, left: 0, bottom: 0 }}>
+                                <XAxis
+                                    dataKey="name"
+                                    axisLine={false}
+                                    tickLine={false}
+                                    tick={{ fontSize: 9, fill: '#9CA3AF' }}
+                                    dy={5}
+                                />
+                                <Tooltip content={<CustomSeasonalityTooltip />} cursor={{ fill: 'transparent' }} />
                                 <Bar dataKey="generation" radius={[2, 2, 0, 0]}>
                                     {seasonalityData.map((entry, index) => (
                                         <Cell key={`cell-${index}`} fill={entry.isDry ? '#F59E0B' : '#3B82F6'} />
