@@ -25,7 +25,7 @@ export default function VerdictSection({ data, score, currencySymbol }) {
             <div className="flex-1 md:pr-12 relative z-10">
                 <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#EEFbf4] text-[#2E7D32] rounded-full text-xs font-bold tracking-wider mb-4 border border-[#2E7D32]/20">
                     <span className="material-icons-outlined text-[14px]">check_circle</span>
-                    {data?.status === 'HIGHLY_VIABLE' ? 'HIGHLY VIABLE' : data?.status?.replace('_', ' ')}
+                    {data?.status === 'HIGHLY_VIABLE' ? 'HIGHLY VIABLE' : data?.status?.replace(/_/g, ' ')}
                 </div>
 
                 <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 tracking-tight">Solar Viability Verdict</h2>

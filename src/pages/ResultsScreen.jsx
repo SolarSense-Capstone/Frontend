@@ -4,6 +4,7 @@ import { usdToLocal } from "../utils/currency/converter";
 import FailureCard from "../components/assessment/results/FailureCard";
 
 // New Dashboard Components
+import ResultsHeader from "../components/assessment/results/ResultsHeader";
 import VerdictSection from "../components/assessment/results/Dashboard/VerdictSection";
 import MetricsRow from "../components/assessment/results/Dashboard/MetricsRow";
 import CoverageAndFinancialRow from "../components/assessment/results/Dashboard/CoverageAndFinancialRow";
@@ -72,17 +73,9 @@ export default function ResultsScreen({ onReset, currencySymbol, currencyCode, o
   // Apply conversion strictly for display
   const data = useMemo(() => {
     return ok && outcome?.data ? mapDataToLocalCurrency(outcome.data, currencyCode, currencySymbol) : null;
-  }, [ok, outcome?.data, currencyCode, currencySymbol]);
+  }, [ok, outcome, currencyCode, currencySymbol]);
 
   const [showHelp, setShowHelp] = useState(false);
-
-  // Fallback missing feature handlers
-  const handleFeatureUnavailable = () => {
-    alert("Report download temporarily unavailable. Please screenshot your results.");
-  }
-  const handleEmailUnavailable = () => {
-    alert("Email sending is temporarily unavailable. Please screenshot your results.");
-  }
 
   if (!ok) {
     return (
@@ -105,6 +98,9 @@ export default function ResultsScreen({ onReset, currencySymbol, currencyCode, o
   return (
     <div className="flex-1 flex flex-col bg-[#F9FAFB] px-4 md:px-8 py-10 relative">
       <div className="max-w-[1200px] mx-auto w-full space-y-6 animate-slide-up opacity-0">
+
+        {/* Results Header */}
+        <ResultsHeader data={data} />
 
         {/* Top Verdict Section */}
         <VerdictSection data={data} score={score} currencySymbol={currencySymbol} />
