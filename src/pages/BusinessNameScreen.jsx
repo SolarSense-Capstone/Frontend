@@ -14,12 +14,11 @@ export default function BusinessNameScreen({ initialName = "", onContinue, onBac
     return (
         <div className="flex-1 flex flex-col bg-[#F9FAFB] px-6 pt-12 md:pt-24 pb-32 md:pb-40">
             <div className="max-w-xl mx-auto w-full flex flex-col items-center">
+                <div className="w-full self-stretch mb-4">
+                    <ProgressBar step={1} totalSteps={5} />
+                </div>
                 <div className="w-full self-start mb-4">
                     <BackNav onBack={onBack} />
-                </div>
-
-                <div className="w-full self-stretch">
-                    <ProgressBar step={1} totalSteps={5} />
                 </div>
 
                 <StepIntro
