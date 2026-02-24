@@ -83,17 +83,20 @@ export default function CostAndEnergyMixRow({ data, currencySymbol }) {
                     <span className="material-icons-outlined text-gray-400">show_chart</span>
                 </div>
 
-                <div className="flex-1 min-h-[240px] w-full">
+                <div className="flex-1 min-h-[240px] w-full mt-4">
                     <ResponsiveContainer width="100%" height="100%">
-                        <BarChart data={comparisonData} margin={{ top: 20, right: 0, left: -20, bottom: 0 }}>
+                        <BarChart data={comparisonData} margin={{ top: 20, right: 0, left: 10, bottom: 0 }}>
                             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" />
-                            <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#9CA3AF' }} dy={10} />
-                            <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#9CA3AF' }} dx={-10} tickFormatter={(val) => val >= 1000000 ? `${(val / 1000000).toFixed(1)}M` : val >= 1000 ? `${(val / 1000).toFixed(0)}k` : val} />
-                            <Tooltip content={<CustomBarTooltip currencySymbol={currencySymbol} coveragePercent={coveragePercent} />} cursor={{ fill: 'transparent' }} />
-                            <Bar dataKey="value" radius={[4, 4, 0, 0]}>
+                            <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: '#6B7280', fontWeight: 500 }} dy={10} />
+                            <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#9CA3AF' }} dx={-10} tickFormatter={(val) => val >= 1000 ? `${(val / 1000).toFixed(0)}k` : val} />
+                            <Tooltip
+                                content={<CustomBarTooltip currencySymbol={currencySymbol} coveragePercent={coveragePercent} />}
+                                cursor={{ fill: 'transparent' }}
+                            />
+                            <Bar dataKey="value" radius={[4, 4, 0, 0]} minPointSize={5} barSize={80}>
                                 {
                                     comparisonData.map((entry, index) => (
-                                        <Cell key={`cell-${index}`} fill={index === 0 ? '#F59E0B' : '#2E7D32'} />
+                                        <Cell key={`cell-${index}`} fill={index === 0 ? '#F59E0B' : '#00A190'} />
                                     ))
                                 }
                             </Bar>
