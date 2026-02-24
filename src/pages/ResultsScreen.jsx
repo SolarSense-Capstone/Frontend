@@ -123,27 +123,10 @@ export default function ResultsScreen({ onReset, currencySymbol, currencyCode, o
 
         {/* Action Buttons Footer */}
         <div className="pt-10 pb-20 flex flex-col items-center">
-          <button onClick={onReset} className="flex items-center gap-1.5 text-[#00A190] font-bold text-sm mb-6 hover:opacity-80 transition-opacity">
+          <button onClick={onReset} className="flex items-center gap-1.5 text-[#2E7D32] font-bold text-sm mb-6 hover:opacity-80 transition-opacity">
             <span className="material-icons-outlined text-[16px]">refresh</span>
             Run Another Assessment
           </button>
-
-          <div className="flex flex-col sm:flex-row w-full max-w-2xl gap-4">
-            <button
-              onClick={handleFeatureUnavailable}
-              className="flex-1 flex items-center justify-center gap-2 bg-[#2E7D32] text-white py-4 rounded-xl font-bold hover:bg-[#1B5E20] transition-colors shadow-lg"
-            >
-              <span className="material-icons-outlined text-[18px]">download</span>
-              Download Detailed Report
-            </button>
-            <button
-              onClick={handleEmailUnavailable}
-              className="flex-1 flex items-center justify-center gap-2 bg-white text-[#2E7D32] border border-[#2E7D32] py-4 rounded-xl font-bold hover:bg-gray-50 transition-colors"
-            >
-              <span className="material-icons-outlined text-[18px]">email</span>
-              Send to Email
-            </button>
-          </div>
         </div>
 
       </div>

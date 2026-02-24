@@ -26,7 +26,7 @@ const EQUIPMENT_TYPES = [
     iconColor: "text-purple-400",
   },
   {
-    id: "displayChillers",
+    id: "displayCoolers",
     label: "Display Coolers",
     icon: "door_sliding",
     iconBg: "bg-sky-50",
@@ -53,7 +53,7 @@ export default function EquipmentProfilingScreen({ initialEquipment, onContinue,
     freezers: { quantity: 0, hoursPerDay: 0 },
     refrigerators: { quantity: 0, hoursPerDay: 0 },
     coldRoom: { quantity: 0, hoursPerDay: 0 },
-    displayChillers: { quantity: 0, hoursPerDay: 0 },
+    displayCoolers: { quantity: 0, hoursPerDay: 0 },
     iceMachines: { quantity: 0, hoursPerDay: 0 },
     lighting: { quantity: 0, hoursPerDay: 0 },
   });
@@ -82,9 +82,11 @@ export default function EquipmentProfilingScreen({ initialEquipment, onContinue,
 
   return (
     <div className="flex-1 flex flex-col bg-[#F9FAFB] px-6 pt-12 md:pt-20 pb-32 md:pb-40">
-      <div className="max-w-2xl mx-auto w-full">
+      <div className="max-w-[600px] mx-auto w-full">
+        <div className="mb-4">
+          <BackNav onBack={onBack} />
+        </div>
         <ProgressBar step={4} totalSteps={5} />
-        <BackNav onBack={onBack} />
 
         <div className="text-center my-8">
           <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">
@@ -157,7 +159,7 @@ export default function EquipmentProfilingScreen({ initialEquipment, onContinue,
         </div>
       </div>
 
-      <StickyContinue canContinue={canContinue} onClick={() => onContinue(equipment)} />
+      <StickyContinue canContinue={canContinue} onClick={() => onContinue(equipment)} maxWidthClass="max-w-[600px]" />
     </div>
   );
 }

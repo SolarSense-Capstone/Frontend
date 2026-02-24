@@ -1,7 +1,13 @@
 export const EXCHANGE_RATES = {
-    NGN: 494,
+    NGN: 1550, // Updated approximate rate
     KES: 129,
-    // others can be added here
+    GHS: 12.5,
+    ZAR: 19,
+    ETB: 57,
+    UGX: 3800,
+    TZS: 2500,
+    RWF: 1280,
+    USD: 1 // Baseline
 };
 
 export function localToUSD(value, currencyCode) {

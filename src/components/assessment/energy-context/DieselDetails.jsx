@@ -53,7 +53,7 @@ export default function DieselDetails({
               setDieselPricePerLiter(val);
             }}
             placeholder="Price"
-            className={`w-full bg-white border border-gray-200 rounded-xl py-3.5 text-sm outline-none focus:ring-2 focus:ring-[#2E7D32] ${currencySymbol ? "pl-8 pr-4" : "px-4"
+            className={`w-full bg-white border border-gray-200 rounded-xl py-3.5 text-sm outline-none focus:ring-2 focus:ring-[#2E7D32] ${currencySymbol ? "pl-14 pr-4" : "px-4"
               }`}
           />
         </div>

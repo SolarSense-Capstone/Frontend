@@ -12,6 +12,10 @@ const BUSINESS_TYPE_MAP = {
   mini_supermarket: "mini_supermarket",
   cafe: "Cafe",
   other: "other",
+  // Backward compatibility for cached state
+  frozen_food_retail: "Retail",
+  cold_storage: "Retail",
+  supermarket: "mini_supermarket",
 };
 
 // Map frontend keys to backend expected equipment types

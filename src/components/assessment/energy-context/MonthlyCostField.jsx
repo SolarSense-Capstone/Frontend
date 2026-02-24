@@ -33,7 +33,7 @@ export default function MonthlyCostField({
             onChange(val);
           }}
           placeholder="0.00"
-          className="w-full bg-white border border-gray-200 rounded-xl pl-12 pr-4 py-5 text-xl font-bold focus:ring-2 focus:ring-[#2E7D32] outline-none shadow-sm"
+          className="w-full bg-white border border-gray-200 rounded-xl pl-16 pr-4 py-5 text-xl font-bold focus:ring-2 focus:ring-[#2E7D32] outline-none shadow-sm"
         />
       </div>
 

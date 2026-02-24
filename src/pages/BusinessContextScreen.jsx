@@ -8,7 +8,7 @@ import ProgressBar from "../components/common/ProgressBar";
 const BUSINESS_TYPES = [
   {
     id: "frozen_food_retail",
-    backendValue: "frozen_food_retail",
+    backendValue: "Retail",
     label: "Frozen Food Retail",
     icon: "ac_unit",
   },
@@ -20,7 +20,7 @@ const BUSINESS_TYPES = [
   },
   {
     id: "cold_storage",
-    backendValue: "cold_storage",
+    backendValue: "Retail",
     label: "Cold Storage",
     icon: "kitchen",
   },
@@ -40,9 +40,10 @@ const BUSINESS_TYPES = [
     id: "bakery",
     backendValue: "Bakery",
     label: "Bakery",
-    icon: "balance",
+    icon: "cake",
   },
 ];
+
 
 export default function BusinessContextScreen({ initialType = "", onContinue, onBack }) {
   const initialSelected = BUSINESS_TYPES.find(t => t.backendValue === initialType)?.id || null;
@@ -53,12 +54,14 @@ export default function BusinessContextScreen({ initialType = "", onContinue, on
 
   return (
     <div className="flex-1 flex flex-col bg-[#F9FAFB] px-6 pt-12 md:pt-24 pb-32 md:pb-40">
-      <div className="max-w-3xl mx-auto w-full flex flex-col items-center">
+      <div className="max-w-2xl mx-auto w-full flex flex-col items-center">
+        <div className="w-full self-start mb-4">
+          <BackNav onBack={onBack} />
+        </div>
+
         <div className="w-full self-stretch">
           <ProgressBar step={2} totalSteps={5} />
         </div>
-
-        <BackNav onBack={onBack} />
 
         <StepIntro
           title="What type of business do you run?"
@@ -77,6 +80,7 @@ export default function BusinessContextScreen({ initialType = "", onContinue, on
 
       <StickyContinue
         canContinue={canContinue}
+        maxWidthClass="max-w-2xl"
         onClick={() =>
           canContinue &&
           onContinue({

@@ -137,9 +137,13 @@ export default function BusinessLocationScreen({
 
     return (
         <div className="flex-1 flex flex-col bg-[#F9FAFB] px-6 pt-12 md:pt-24 pb-32 md:pb-40">
-            <div className="max-w-xl mx-auto w-full">
-                <ProgressBar step={3} totalSteps={5} />
-                <BackNav onBack={onBack} />
+            <div className="max-w-xl mx-auto w-full flex flex-col items-center">
+                <div className="w-full self-start mb-4">
+                    <BackNav onBack={onBack} />
+                </div>
+                <div className="w-full self-stretch">
+                    <ProgressBar step={3} totalSteps={5} />
+                </div>
 
                 {/* LOCATION SECTION */}
                 <div className="mb-10 mt-4">
@@ -172,7 +176,7 @@ export default function BusinessLocationScreen({
 
                         <div>
                             <label htmlFor="state-input" className="block mb-2">
-                                <span className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">State / Province</span>
+                                <span className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">State / Province (Optional)</span>
                             </label>
                             <input
                                 id="state-input"

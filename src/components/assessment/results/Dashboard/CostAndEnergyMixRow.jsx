@@ -3,12 +3,16 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, PieCha
 import formatMoney from "../../../../utils/format/formatMoney";
 
 export default function CostAndEnergyMixRow({ data, currencySymbol }) {
-    const currentCost = data?.current_energy_cost?.total_monthly || 0;
-    const newCost = Math.max(0, currentCost - (data?.monthly_savings || 0));
+    const currentCostMonthly = data?.current_energy_cost?.total_monthly || 0;
+    const monthlySavings = data?.monthly_savings || 0;
+
+    const currentCostAnnual = currentCostMonthly * 12;
+    const newCostAnnual = Math.max(0, currentCostMonthly - monthlySavings) * 12;
+    const annualSavings = monthlySavings * 12;
 
     const comparisonData = [
-        { name: 'Current', value: currentCost },
-        { name: 'After Solar', value: newCost },
+        { name: 'Current', value: currentCostAnnual },
+        { name: 'After Solar', value: newCostAnnual },
     ];
 
     const usesDiesel = data.energy_scenario === 'diesel_replacement';
@@ -34,7 +38,7 @@ export default function CostAndEnergyMixRow({ data, currencySymbol }) {
             {/* Monthly Energy Cost Comparison - 2/3 */}
             <div className="lg:col-span-2 bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-gray-100 flex flex-col">
                 <div className="flex justify-between items-start mb-6">
-                    <h3 className="text-lg font-bold text-gray-900">Monthly Energy Cost Comparison</h3>
+                    <h3 className="text-lg font-bold text-gray-900">Annual Energy Cost Comparison</h3>
                     <span className="material-icons-outlined text-gray-400">show_chart</span>
                 </div>
 
@@ -43,11 +47,11 @@ export default function CostAndEnergyMixRow({ data, currencySymbol }) {
                         <BarChart data={comparisonData} margin={{ top: 20, right: 0, left: -20, bottom: 0 }}>
                             <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#E5E7EB" />
                             <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#9CA3AF' }} dy={10} />
-                            <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#9CA3AF' }} dx={-10} tickFormatter={(val) => val >= 1000 ? `${(val / 1000).toFixed(0)}k` : val} />
+                            <YAxis axisLine={false} tickLine={false} tick={{ fontSize: 10, fill: '#9CA3AF' }} dx={-10} tickFormatter={(val) => val >= 1000000 ? `${(val / 1000000).toFixed(1)}M` : val >= 1000 ? `${(val / 1000).toFixed(0)}k` : val} />
                             <Bar dataKey="value" radius={[4, 4, 0, 0]}>
                                 {
                                     comparisonData.map((entry, index) => (
-                                        <Cell key={`cell-${index}`} fill={index === 0 ? '#F59E0B' : '#00A190'} />
+                                        <Cell key={`cell-${index}`} fill={index === 0 ? '#F59E0B' : '#2E7D32'} />
                                     ))
                                 }
                             </Bar>
@@ -55,13 +59,18 @@ export default function CostAndEnergyMixRow({ data, currencySymbol }) {
                     </ResponsiveContainer>
                 </div>
 
-                <div className="mt-6 flex items-center justify-between border-t border-gray-100 pt-4">
+                <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4 border-t border-gray-100 pt-4">
                     <div>
-                        <span className="text-[10px] uppercase font-bold text-gray-400 tracking-widest block mb-1">Estimated Monthly Savings</span>
-                        <span className="text-xl font-black text-[#00A190]">{formatMoney(data.monthly_savings, currencySymbol)}</span>
+                        <span className="text-[10px] uppercase font-bold text-gray-400 tracking-widest block mb-1">Current Annual Cost</span>
+                        <span className="text-lg font-black text-gray-900">{formatMoney(currentCostAnnual, currencySymbol)}</span>
                     </div>
-                    <div className="text-[9px] text-gray-400 text-right max-w-[150px]">
-                        Costs are estimated based on equipment usage, regional tariffs, and diesel inputs.
+                    <div>
+                        <span className="text-[10px] uppercase font-bold text-gray-400 tracking-widest block mb-1">After Solar Annual Cost</span>
+                        <span className="text-lg font-black text-gray-900">{formatMoney(newCostAnnual, currencySymbol)}</span>
+                    </div>
+                    <div>
+                        <span className="text-[10px] uppercase font-bold text-gray-400 tracking-widest block mb-1">Estimated Annual Savings</span>
+                        <span className="text-lg font-black text-[#2E7D32]">{formatMoney(annualSavings, currencySymbol)}</span>
                     </div>
                 </div>
             </div>
@@ -109,7 +118,7 @@ export default function CostAndEnergyMixRow({ data, currencySymbol }) {
                 {usesDiesel && data.diesel_details && (
                     <div className="mt-6 pt-4 border-t border-gray-100 flex justify-between items-end">
                         <div>
-                            <span className="text-[9px] uppercase font-bold text-gray-400 tracking-widest block mb-1">Diesel Tariff</span>
+                            <span className="text-[9px] uppercase font-bold text-gray-400 tracking-widest block mb-1">Diesel Cost</span>
                             <span className="text-xs font-bold text-gray-900">{formatMoney(data.diesel_details.price_per_liter, currencySymbol)}/L</span>
                         </div>
                         <div className="text-right">

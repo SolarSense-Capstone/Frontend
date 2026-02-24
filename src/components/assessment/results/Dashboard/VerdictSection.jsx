@@ -23,7 +23,7 @@ export default function VerdictSection({ data, score, currencySymbol }) {
             <div className="absolute top-0 right-0 w-64 h-64 bg-[#f2fdfa] rounded-full blur-3xl -mr-20 -mt-20 opacity-60 pointer-events-none"></div>
 
             <div className="flex-1 md:pr-12 relative z-10">
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#EEFbf4] text-[#00A190] rounded-full text-xs font-bold tracking-wider mb-4 border border-[#00A190]/20">
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#EEFbf4] text-[#2E7D32] rounded-full text-xs font-bold tracking-wider mb-4 border border-[#2E7D32]/20">
                     <span className="material-icons-outlined text-[14px]">check_circle</span>
                     {data?.status === 'HIGHLY_VIABLE' ? 'HIGHLY VIABLE' : data?.status?.replace('_', ' ')}
                 </div>
@@ -56,7 +56,7 @@ export default function VerdictSection({ data, score, currencySymbol }) {
                         <path
                             d="M 20 80 A 60 60 0 0 1 140 80"
                             fill="none"
-                            stroke="#00A190"
+                            stroke="#2E7D32"
                             strokeWidth={strokeWidth}
                             strokeLinecap="round"
                             strokeDasharray={circumference}
