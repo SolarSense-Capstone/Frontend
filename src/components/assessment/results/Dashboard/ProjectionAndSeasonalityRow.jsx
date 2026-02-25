@@ -73,7 +73,7 @@ export default function ProjectionAndSeasonalityRow({ data }) {
     return (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
 
-            {/* 25-Year Solar Performance Projection - 2/3 */}
+            {/* 25-Year Solar Performance Projection Chart */}
             <div className="lg:col-span-2 bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-gray-100 flex flex-col">
                 <div className="flex justify-between items-start mb-6">
                     <h3 className="text-lg font-bold text-gray-900">25-Year Solar Performance Projection</h3>
@@ -125,7 +125,7 @@ export default function ProjectionAndSeasonalityRow({ data }) {
 
             <div className="lg:col-span-1 flex flex-col gap-6">
 
-                {/* Seasonality - 1/3 top */}
+                {/* Seasonality Chart */}
                 <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-gray-100 flex-1 flex flex-col">
                     <div className="flex justify-between items-start mb-6">
                         <h3 className="text-lg font-bold text-gray-900">Seasonality</h3>
@@ -162,7 +162,7 @@ export default function ProjectionAndSeasonalityRow({ data }) {
                     </div>
                 </div>
 
-                {/* Lifetime Summary - 1/3 bottom */}
+                {/* Lifetime Summary Metrics */}
                 <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-gray-100">
                     <h3 className="text-[10px] uppercase font-bold tracking-widest text-gray-400 mb-6">LIFETIME SUMMARY</h3>
                     <div className="space-y-4 text-sm text-gray-500">

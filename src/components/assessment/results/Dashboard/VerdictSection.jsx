@@ -12,10 +12,64 @@ export default function VerdictSection({ data, score, currencySymbol }) {
     const circumference = Math.PI * radius; // length of half circle
     const strokeDashoffset = circumference - (normalizedScore / 100) * circumference;
 
-    // Generate dynamic explanation overriding the static backend response.
-    const customExplanation = data?.monthly_savings
-        ? `Your energy usage patterns provide a strong case for solar implementation. Transitioning to a solar-hybrid system can drastically reduce OPEX, with estimated savings of ${formatMoney(data.monthly_savings, currencySymbol)} per month, and mitigate the risk of grid instability or fuel price volatility.`
-        : (data?.explanation || "Your energy usage patterns provide a strong case for solar implementation. Transitioning to a solar-hybrid system can drastically reduce OPEX and mitigate the risk of grid instability or fuel price volatility.");
+    // Determine colors and icons based on status
+    const statusStr = (data?.status || '').toUpperCase().trim();
+    const isNotViable = statusStr.includes('NOT') || statusStr.includes('LOW') || statusStr.includes('POOR');
+    const isModerate = statusStr.includes('MODERATE') || statusStr.includes('MEDIUM') || statusStr.includes('AVERAGE');
+
+    let statusColorClass = "bg-[#EEFbf4] text-[#2E7D32] border-[#2E7D32]/20";
+    let statusIcon = "check_circle";
+    let progressColor = "#2E7D32";
+
+    if (isNotViable) {
+        statusColorClass = "bg-[#F3F4F6] text-[#4B5563] border-[#4B5563]/20";
+        statusIcon = "info";
+        progressColor = "#4B5563";
+    } else if (isModerate) {
+        statusColorClass = "bg-[#FFFBEB] text-[#D97706] border-[#D97706]/20";
+        statusIcon = "info";
+        progressColor = "#D97706";
+    }
+
+    // Fallback UI copy if DSE backend does not return an explanation string
+    let customExplanation = data?.explanation
+        ? data.explanation
+        : `Your energy usage patterns provide a strong case for solar implementation. Transitioning to a solar-hybrid system can drastically reduce OPEX, with estimated savings of ${formatMoney(data?.monthly_savings || 0, currencySymbol)} per month, and mitigate the risk of grid instability or fuel price volatility.`;
+
+    // Intercept and patch contradictory backend responses for non-viable/moderate scenarios
+    if (isNotViable && customExplanation.includes('strong case')) {
+        customExplanation = customExplanation.replace(
+            'provide a strong case for solar implementation',
+            'do not currently provide a strong financial case for solar implementation'
+        ).replace(
+            'can drastically reduce OPEX',
+            'might not significantly reduce OPEX'
+        );
+    } else if (isModerate && customExplanation.includes('strong case')) {
+        customExplanation = customExplanation.replace(
+            'provide a strong case',
+            'provide moderate potential'
+        );
+    }
+
+    // Extract raw unscaled values from the DSE response and replace with localized UI format
+    if (data?.explanation && /(Significant savings \(|Savings of |Significant savings of ).*?\/mo\)?/i.test(customExplanation)) {
+        customExplanation = customExplanation.replace(
+            /(Significant savings \(|Savings of |Significant savings of ).*?\/mo\)?/gi,
+            `Significant savings of ${formatMoney(data?.monthly_savings || 0, currencySymbol)}/mo`
+        );
+    }
+
+    // Append contextual business logic based on the calculated viability score
+    if (!customExplanation.includes("Transitioning to a solar-hybrid system")) {
+        if (isNotViable) {
+            customExplanation += " At this time, the upfront capital expenditure of a solar installation may outweigh the long-term operational savings.";
+        } else if (isModerate) {
+            customExplanation += " A blended energy approach could provide partial OPEX relief, though the payback period may be longer than average.";
+        } else {
+            customExplanation += " Transitioning to a solar-hybrid system can drastically reduce OPEX, and mitigate the risk of grid instability or fuel price volatility.";
+        }
+    }
 
     return (
         <div className="bg-white rounded-[2rem] p-8 md:p-10 shadow-sm border border-gray-100 flex flex-col md:flex-row items-center justify-between overflow-hidden relative">
@@ -23,9 +77,9 @@ export default function VerdictSection({ data, score, currencySymbol }) {
             <div className="absolute top-0 right-0 w-64 h-64 bg-[#f2fdfa] rounded-full blur-3xl -mr-20 -mt-20 opacity-60 pointer-events-none"></div>
 
             <div className="flex-1 md:pr-12 relative z-10">
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#EEFbf4] text-[#2E7D32] rounded-full text-xs font-bold tracking-wider mb-4 border border-[#2E7D32]/20">
-                    <span className="material-icons-outlined text-[14px]">check_circle</span>
-                    {data?.status === 'HIGHLY_VIABLE' ? 'HIGHLY VIABLE' : data?.status?.replace(/_/g, ' ')}
+                <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold tracking-wider mb-4 border ${statusColorClass}`}>
+                    <span className="material-icons-outlined text-[14px]">{statusIcon}</span>
+                    {statusStr === 'HIGHLY_VIABLE' ? 'HIGHLY VIABLE' : statusStr.replace(/_/g, ' ')}
                 </div>
 
                 <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4 tracking-tight">Solar Viability Verdict</h2>
@@ -56,7 +110,7 @@ export default function VerdictSection({ data, score, currencySymbol }) {
                         <path
                             d="M 20 80 A 60 60 0 0 1 140 80"
                             fill="none"
-                            stroke="#2E7D32"
+                            stroke={progressColor}
                             strokeWidth={strokeWidth}
                             strokeLinecap="round"
                             strokeDasharray={circumference}

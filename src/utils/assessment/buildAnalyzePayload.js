@@ -56,7 +56,7 @@ export default function buildAnalyzePayload(formData) {
 
   const equipment = [];
 
-  // Construct equipment array dynamically
+  // Transform frontend equipment map into array required by backend schema
   if (formData?.equipment) {
     Object.entries(formData.equipment).forEach(([key, item]) => {
       const quantity = toNumberOrFallback(item.quantity, 0);
@@ -99,7 +99,7 @@ export default function buildAnalyzePayload(formData) {
       1000000, // expanded limit for local currencies
     );
 
-    // Convert to USD before dispatching
+    // Standardize diesel price to USD base currency
     payload.diesel_price_per_liter = localToUSD(localDieselPrice, formData?.currencyCode);
   }
 

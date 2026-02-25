@@ -58,7 +58,7 @@ export default function CostAndEnergyMixRow({ data, currencySymbol }) {
 
     const usesDiesel = data.energy_scenario === 'diesel_replacement';
 
-    // Derived Mix data from specific breakdown
+    // Calculate grid vs diesel percentages for energy mix chart
     const gridKwh = data?.estimated_consumption_kwh ? (data.estimated_consumption_kwh - (data?.diesel_details?.diesel_kwh_monthly || 0)) : 0;
     const dieselKwh = data?.diesel_details?.diesel_kwh_monthly || 0;
 
@@ -76,7 +76,7 @@ export default function CostAndEnergyMixRow({ data, currencySymbol }) {
     return (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
 
-            {/* Monthly Energy Cost Comparison - 2/3 */}
+            {/* Annual Energy Cost Comparison Chart */}
             <div className="lg:col-span-2 bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-gray-100 flex flex-col">
                 <div className="flex justify-between items-start mb-6">
                     <h3 className="text-lg font-bold text-gray-900">Annual Energy Cost Comparison</h3>
@@ -127,7 +127,7 @@ export default function CostAndEnergyMixRow({ data, currencySymbol }) {
                 </div>
             </div >
 
-            {/* Energy Mix Breakdown - 1/3 */}
+            {/* Energy Mix Breakdown Chart */}
             < div className="lg:col-span-1 bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-gray-100 flex flex-col" >
                 <h3 className="text-lg font-bold text-gray-900 mb-6">Energy Mix Breakdown</h3>
 

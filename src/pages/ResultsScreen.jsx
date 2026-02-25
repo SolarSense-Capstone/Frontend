@@ -11,13 +11,13 @@ import CoverageAndFinancialRow from "../components/assessment/results/Dashboard/
 import CostAndEnergyMixRow from "../components/assessment/results/Dashboard/CostAndEnergyMixRow";
 import ProjectionAndSeasonalityRow from "../components/assessment/results/Dashboard/ProjectionAndSeasonalityRow";
 
-// Helper to convert known money-related fields from backend USD to local
+// Data transformer to localize currency values returned by the backend ROI engine
 const mapDataToLocalCurrency = (data, currencyCode, currencySymbol) => {
   if (!data || !currencyCode) return data;
 
   const mapped = { ...data };
 
-  // Convert root level money fields
+  // Localize top-level financial metrics
   const moneyFields = [
     'monthly_savings',
     'system_cost'
@@ -29,7 +29,7 @@ const mapDataToLocalCurrency = (data, currencyCode, currencySymbol) => {
     }
   });
 
-  // Convert current energy baseline fields
+  // Localize current energy baseline metrics
   if (mapped.current_energy_cost) {
     mapped.current_energy_cost = { ...mapped.current_energy_cost };
     const currentEnergyFields = [
@@ -44,7 +44,7 @@ const mapDataToLocalCurrency = (data, currencyCode, currencySymbol) => {
     });
   }
 
-  // Convert nested diesel fields
+  // Localize nested diesel tariff inputs
   if (mapped.diesel_details) {
     mapped.diesel_details = { ...mapped.diesel_details };
     const dieselMoneyFields = [
@@ -58,7 +58,7 @@ const mapDataToLocalCurrency = (data, currencyCode, currencySymbol) => {
     });
   }
 
-  // Replace "$" with local currency symbol in explanation if it exists
+  // Inject localized currency symbol into explanation string interpolations
   if (mapped.explanation && typeof mapped.explanation === 'string') {
     mapped.explanation = mapped.explanation.replace(/\$/g, currencySymbol);
   }
@@ -70,7 +70,7 @@ export default function ResultsScreen({ onReset, currencySymbol, currencyCode, o
   // outcome: { ok: boolean, data?: object, error?: object }
   const ok = outcome?.ok;
 
-  // Apply conversion strictly for display
+  // Memoize localized mapped data to prevent unnecessary re-renders
   const data = useMemo(() => {
     return ok && outcome?.data ? mapDataToLocalCurrency(outcome.data, currencyCode, currencySymbol) : null;
   }, [ok, outcome, currencyCode, currencySymbol]);
@@ -92,7 +92,7 @@ export default function ResultsScreen({ onReset, currencySymbol, currencyCode, o
     );
   }
 
-  // Generate a mock score if one doesn't exist
+  // Fallback viability score if absent from backend DSE response
   const score = typeof data?.viability_score === 'number' ? data.viability_score : 92.4;
 
   return (
