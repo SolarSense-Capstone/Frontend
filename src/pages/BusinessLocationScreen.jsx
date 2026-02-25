@@ -92,7 +92,7 @@ export default function BusinessLocationScreen({
         const normalizedCity = city.trim();
         let coords = CITY_COORDINATES[normalizedCity];
 
-        // If city not found, fallback to country capitals to avoid sending Lagos for everyone
+        // Provide default capital city coordinates if selected city is unmapped
         if (!coords) {
             const countryDefaults = {
                 "Nigeria": CITY_COORDINATES["Lagos"],

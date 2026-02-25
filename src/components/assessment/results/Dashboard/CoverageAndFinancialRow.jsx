@@ -13,7 +13,7 @@ export default function CoverageAndFinancialRow({ data, currencySymbol }) {
     return (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
 
-            {/* Solar Coverage Analysis - 2/3 width */}
+            {/* Solar Coverage Analysis Chart */}
             <div className="lg:col-span-2 bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-gray-100 flex flex-col justify-center">
                 <div className="flex justify-between items-center mb-6">
                     <h3 className="text-lg font-bold text-gray-900">Solar Coverage Analysis</h3>
@@ -36,7 +36,7 @@ export default function CoverageAndFinancialRow({ data, currencySymbol }) {
                 <p className="text-[10px] text-gray-400 mt-2">Based on estimated consumption and projected generation.</p>
             </div>
 
-            {/* Financial Impact - 1/3 width */}
+            {/* Financial Impact Summary */}
             <div className="lg:col-span-1 bg-[#2E7D32] rounded-2xl p-6 md:p-8 text-white shadow-lg overflow-hidden relative">
                 <div className="absolute top-0 right-0 w-32 h-32 bg-white rounded-full blur-3xl opacity-10 -mr-10 -mt-10"></div>
 
