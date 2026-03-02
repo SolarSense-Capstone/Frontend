@@ -66,16 +66,16 @@ export default function EnergyContextScreen({
   const handleContinue = () => {
     if (!isValid) return;
     onContinue({
-      energy_scenario: scenario, // matches backend response doc naming
+      energy_scenario: scenario,
       uses_diesel: scenario === "diesel_replacement",
       monthly_cost: Number(monthlyCost),
       currency: currencyCode || "USD",
       diesel:
         scenario === "diesel_replacement"
           ? {
-              hours_per_day: Number(dieselHoursPerDay),
-              price_per_liter: Number(dieselPricePerLiter),
-            }
+            hours_per_day: Number(dieselHoursPerDay),
+            price_per_liter: Number(dieselPricePerLiter),
+          }
           : null,
     });
   };

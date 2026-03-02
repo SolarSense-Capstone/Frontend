@@ -6,7 +6,7 @@ const EQUIPMENT_LABELS = {
   freezers: "Freezers",
   refrigerators: "Refrigerators",
   coldRoom: "Cold Room",
-  displayChillers: "Display Chillers",
+  displayChillers: "Display Coolers",
   iceMachines: "Ice Machines",
   lighting: "Lighting",
 };
@@ -57,11 +57,10 @@ export default function ReviewScreen({ data, onContinue, onBack }) {
               </div>
             </div>
 
-            {/* Location */}
             <div className="mb-8">
               <p className="text-[11px] text-gray-400 font-bold uppercase tracking-widest mb-1 shadow-sm">Location</p>
               <p className="font-semibold text-gray-900">
-                {[location.city, location.state, location.country].filter(Boolean).join(", ")}
+                {[location.address, location.city, location.state, location.country].filter(Boolean).join(", ")}
               </p>
             </div>
 
@@ -116,17 +115,11 @@ export default function ReviewScreen({ data, onContinue, onBack }) {
 
         </div>
 
-        {/* Footer Buttons */}
-        <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4 animate-slide-up opacity-0 animation-delay-300">
-          <button
-            onClick={onBack}
-            className="w-full sm:w-1/3 px-6 py-4 font-bold text-[#2E7D32] bg-white border border-[#2E7D32] rounded-xl hover:bg-gray-50 transition-colors"
-          >
-            Edit Details
-          </button>
+        {/* Sticky Actions */}
+        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 px-6 py-4 flex gap-3">
           <button
             onClick={onContinue}
-            className="w-full sm:w-1/3 px-8 py-4 font-bold text-white bg-[#2E7D32] rounded-xl flex items-center justify-center gap-2 hover:bg-[#1B5E20] transition-colors"
+            className="flex-1 max-w-lg mx-auto px-8 py-4 font-bold text-white bg-[#2E7D32] rounded-xl flex items-center justify-center gap-2 hover:bg-[#1B5E20] transition-colors"
           >
             Start Analysis
             <span className="material-icons-outlined text-sm">equalizer</span>

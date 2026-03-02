@@ -10,14 +10,9 @@ export default function ScenarioSelector({
 }) {
   return (
     <>
-      <label className="block mb-4 px-1">
-        <Typography
-          variant="caption"
-          className="font-bold text-gray-700 uppercase tracking-widest"
-        >
-          {label}
-        </Typography>
-      </label>
+      <p className="text-lg font-bold text-gray-900 mb-4">
+        {label}
+      </p>
 
       <div className="grid grid-cols-1 gap-3">
         {scenarios.map((opt) => (

@@ -1,16 +1,11 @@
 import React, { useState, useMemo } from "react";
 import BackNav from "../components/common/BackNav";
 import StickyContinue from "../components/common/StickyContinue";
+import ProgressBar from "../components/common/ProgressBar";
 
-import LocationStepHeader from "../components/assessment/location/StepHeader";
 import CountrySelect from "../components/assessment/location/CountrySelect";
-import StateCityFields from "../components/assessment/location/StateCityFields";
-import AddressField from "../components/assessment/location/AddressField";
-import DetectedCurrencyBadge from "../components/assessment/location/DetectedCurrencyBadge";
-
-import EnergyStepHeader from "../components/assessment/energy-context/StepHeader";
-import ScenarioSelector from "../components/assessment/energy-context/ScenarioSelector";
 import DieselDetails from "../components/assessment/energy-context/DieselDetails";
+import ScenarioSelector from "../components/assessment/energy-context/ScenarioSelector";
 
 const COUNTRIES = [
     { name: "Nigeria", currency: "₦", code: "NGN" },
@@ -26,19 +21,15 @@ const COUNTRIES = [
 const SCENARIOS = [
     {
         id: "grid_only",
-        label: "Fully Grid",
-        desc: "You mainly use grid electricity.",
-        icon: "power",
+        label: "Fully on grid",
+        icon: "bolt",
     },
     {
         id: "diesel_replacement",
-        label: "Off Grid with Diesel Generator",
-        desc: "You use generator for a significant portion of power.",
+        label: "Grid + diesel generator",
         icon: "local_gas_station",
     },
 ];
-
-import ProgressBar from "../components/common/ProgressBar";
 
 export default function BusinessLocationScreen({
     initialLocation,
@@ -71,7 +62,6 @@ export default function BusinessLocationScreen({
 
     const isEnergyValid = useMemo(() => {
         if (!scenario) return false;
-
         if (showDiesel) {
             const h = Number(dieselHoursPerDay);
             const p = Number(dieselPricePerLiter);
@@ -114,51 +104,109 @@ export default function BusinessLocationScreen({
                 <ProgressBar step={3} totalSteps={5} />
 
                 {/* --- LOCATION SECTION --- */}
-                <LocationStepHeader title="Where is your business located?" />
+                <div className="mb-10">
+                    <h2 className="text-2xl md:text-3xl font-bold text-gray-900 text-center mb-1">
+                        Where is your business located?
+                    </h2>
+                    <p className="text-gray-400 text-sm text-center mb-8">
+                        Solar estimates are based on regional data.
+                    </p>
 
-                <div className="space-y-6 mb-12">
-                    <CountrySelect
-                        country={country}
-                        setCountry={setCountry}
-                        countries={COUNTRIES}
-                    />
+                    {/* Row 1: Country + State/Province */}
+                    <div className="grid grid-cols-2 gap-4 mb-4">
+                        {/* Country */}
+                        <div>
+                            <label htmlFor="country-select" className="block mb-2 px-1">
+                                <span className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">Country</span>
+                            </label>
+                            <select
+                                id="country-select"
+                                name="country"
+                                value={country}
+                                onChange={(e) => setCountry(e.target.value)}
+                                className="w-full bg-white border border-gray-200 rounded-xl pl-4 pr-10 py-3.5 text-sm focus:ring-2 focus:ring-[#2E7D32] outline-none shadow-sm appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20viewBox%3D%220%200%2024%2024%22%20stroke%3D%22%23111827%22%20stroke-width%3D%222%22%3E%3Cpath%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20d%3D%22m19%209-7%207-7-7%22%2F%3E%3C%2Fsvg%3E')] bg-[length:1.1rem] bg-[position:right_0.75rem_center] bg-no-repeat"
+                            >
+                                <option value="">Select country</option>
+                                {COUNTRIES.map((c) => (
+                                    <option key={c.name} value={c.name}>{c.name}</option>
+                                ))}
+                            </select>
+                        </div>
 
-                    <StateCityFields
-                        state={state}
-                        setState={setState}
-                        city={city}
-                        setCity={setCity}
-                    />
+                        {/* State / Province */}
+                        <div>
+                            <label htmlFor="state-input" className="block mb-2 px-1">
+                                <span className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">State / Province</span>
+                            </label>
+                            <input
+                                id="state-input"
+                                name="state"
+                                type="text"
+                                value={state}
+                                onChange={(e) => setState(e.target.value)}
+                                placeholder="Enter state"
+                                className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3.5 text-sm focus:ring-2 focus:ring-[#2E7D32] outline-none shadow-sm"
+                            />
+                        </div>
+                    </div>
 
-                    <AddressField address={address} setAddress={setAddress} />
+                    {/* Row 2: City + Street Address */}
+                    <div className="grid grid-cols-2 gap-4">
+                        {/* City */}
+                        <div>
+                            <label htmlFor="city-input" className="block mb-2 px-1">
+                                <span className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">City</span>
+                            </label>
+                            <input
+                                id="city-input"
+                                name="city"
+                                type="text"
+                                value={city}
+                                onChange={(e) => setCity(e.target.value)}
+                                placeholder="Enter city"
+                                className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3.5 text-sm focus:ring-2 focus:ring-[#2E7D32] outline-none shadow-sm"
+                            />
+                        </div>
 
-                    {currency && <DetectedCurrencyBadge currency={currency} />}
+                        {/* Street Address */}
+                        <div>
+                            <label htmlFor="street-address" className="block mb-2 px-1">
+                                <span className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">Street Address (Optional)</span>
+                            </label>
+                            <input
+                                id="street-address"
+                                name="address"
+                                type="text"
+                                value={address}
+                                onChange={(e) => setAddress(e.target.value)}
+                                placeholder="Enter address"
+                                className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3.5 text-sm focus:ring-2 focus:ring-[#2E7D32] outline-none shadow-sm"
+                            />
+                        </div>
+                    </div>
                 </div>
 
                 {/* --- ENERGY SECTION --- */}
-                {isLocationValid && (
-                    <div className="animate-slide-up opacity-0 animation-delay-100">
-                        <EnergyStepHeader title="Power Supply Details" />
+                <div>
+                    <ScenarioSelector
+                        label="How does your business currently get electricity?"
+                        scenarios={SCENARIOS}
+                        value={scenario}
+                        onChange={setScenario}
+                    />
 
-                        <div className="space-y-8 mt-6">
-                            <ScenarioSelector
-                                label="How does your business currently get electricity?"
-                                scenarios={SCENARIOS}
-                                value={scenario}
-                                onChange={setScenario}
+                    {showDiesel && (
+                        <div className="mt-4">
+                            <DieselDetails
+                                dieselHoursPerDay={dieselHoursPerDay}
+                                setDieselHoursPerDay={setDieselHoursPerDay}
+                                dieselPricePerLiter={dieselPricePerLiter}
+                                setDieselPricePerLiter={setDieselPricePerLiter}
+                                currencySymbol={currency}
                             />
-
-                            {showDiesel && (
-                                <DieselDetails
-                                    dieselHoursPerDay={dieselHoursPerDay}
-                                    setDieselHoursPerDay={setDieselHoursPerDay}
-                                    dieselPricePerLiter={dieselPricePerLiter}
-                                    setDieselPricePerLiter={setDieselPricePerLiter}
-                                />
-                            )}
                         </div>
-                    </div>
-                )}
+                    )}
+                </div>
             </div>
 
             <StickyContinue canContinue={isValid} onClick={handleContinue} />
