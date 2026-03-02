@@ -24,7 +24,7 @@ const EquipmentPatternScreen = ({ onContinue, onBack }) => {
       <div className="max-w-xl mx-auto w-full">
         <BackNav onBack={onBack} />
 
-        <StepHeader title="How do you use energy in your business?" />
+        {/* <StepHeader title="How do you use energy in your business?" /> */}
 
         <div className="space-y-12">
           <FridgeStepperCard
@@ -42,7 +42,7 @@ const EquipmentPatternScreen = ({ onContinue, onBack }) => {
         </div>
       </div>
 
-      <StickyContinue canContinue={true} onClick={handleContinue} />
+      <StickyContinue canContinue={isValid} onClick={handleContinue} />
     </div>
   );
 };

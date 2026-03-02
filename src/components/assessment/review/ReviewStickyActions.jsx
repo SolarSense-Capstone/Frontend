@@ -8,18 +8,18 @@ export default function ReviewStickyActions({ onBack, onContinue }) {
         <Button
           variant="outline"
           onClick={onBack}
-          className="w-full sm:w-1/3 py-4"
+          className="w-full sm:w-1/2 py-4 text-lg shadow-xl hover:-translate-y-1 active:scale-95 group"
         >
           Back
         </Button>
         <Button
           onClick={onContinue}
-          className="w-full sm:w-2/3 py-4 text-lg shadow-xl hover:-translate-y-1 active:scale-95 group"
+          className="w-full sm:w-1/2 py-4 text-lg shadow-xl hover:-translate-y-1 active:scale-95 group"
         >
-          <span>Analyze My Business</span>
-          <span className="material-icons-outlined ml-2 group-hover:translate-x-1 transition-transform">
+          <span>Start Analysis</span>
+          {/* <span className="material-icons-outlined ml-2 group-hover:translate-x-1 transition-transform">
             analytics
-          </span>
+          </span> */}
         </Button>
       </div>
     </div>

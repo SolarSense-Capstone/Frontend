@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import LandingScreen from "./pages/LandingScreen";
+import BusinessNameScreen from "./pages/BusinessNameScreen";
 import BusinessContextScreen from "./pages/BusinessContextScreen";
-import LocationScreen from "./pages/LocationScreen";
-import EnergyContextScreen from "./pages/EnergyContextScreen";
+import BusinessLocationScreen from "./pages/BusinessLocationScreen";
 import EquipmentProfilingScreen from "./pages/EquipmentProfilingScreen";
 import ReviewScreen from "./pages/ReviewScreen";
 import ProcessingAnalysisScreen from "./pages/ProcessingAnalysisScreen";
@@ -17,13 +17,14 @@ export default function App() {
     location: { country: "", state: "", city: "", address: "" },
     currencySymbol: "",
     currencyCode: "",
-    energy: null, // { energy_scenario, uses_diesel, monthly_cost, currency, diesel? }
+    energy: null, // { energy_scenario, uses_diesel, currency, diesel? }
     equipment: {
-      refrigerators: { capacity: "", quantity: 0 },
-      freezers: { capacity: "", quantity: 0 },
-      coldRoom: { capacity: "", quantity: 0 },
-      lighting: { enabled: false, count: 0, type: "" },
-      other: { fans: false, pos: false, smallApps: false },
+      freezers: { quantity: 0, hoursPerDay: 0 },
+      refrigerators: { quantity: 0, hoursPerDay: 0 },
+      coldRoom: { quantity: 0, hoursPerDay: 0 },
+      displayChillers: { quantity: 0, hoursPerDay: 0 },
+      iceMachines: { quantity: 0, hoursPerDay: 0 },
+      lighting: { quantity: 0, hoursPerDay: 0 },
     },
   });
 
@@ -42,65 +43,70 @@ export default function App() {
       currencyCode: "",
       energy: null,
       equipment: {
-        refrigerators: { capacity: "", quantity: 0 },
-        freezers: { capacity: "", quantity: 0 },
-        coldRoom: { capacity: "", quantity: 0 },
-        lighting: { enabled: false, count: 0, type: "" },
-        other: { fans: false, pos: false, smallApps: false },
+        freezers: { quantity: 0, hoursPerDay: 0 },
+        refrigerators: { quantity: 0, hoursPerDay: 0 },
+        coldRoom: { quantity: 0, hoursPerDay: 0 },
+        displayChillers: { quantity: 0, hoursPerDay: 0 },
+        iceMachines: { quantity: 0, hoursPerDay: 0 },
+        lighting: { quantity: 0, hoursPerDay: 0 },
       },
     }));
-    setScreen("business-context");
+    setScreen("business-name");
   };
 
   return (
     <div className="min-h-screen flex flex-col">
       {screen === "landing" && (
-        <LandingScreen onStart={() => setScreen("business-context")} />
+        <LandingScreen onStart={() => setScreen("business-name")} />
       )}
 
-      {screen === "business-context" && (
-        <BusinessContextScreen
-          onContinue={({ businessName, businessType }) => {
-            update({ businessName, businessType });
-            setScreen("location");
+      {screen === "business-name" && (
+        <BusinessNameScreen
+          initialName={formData.businessName}
+          onContinue={({ businessName }) => {
+            update({ businessName });
+            setScreen("business-type");
           }}
           onBack={() => setScreen("landing")}
         />
       )}
 
-      {screen === "location" && (
-        <LocationScreen
-          onContinue={(location, currencyInfo) => {
-            update({
-              location,
-              currencySymbol: currencyInfo.currencySymbol,
-              currencyCode: currencyInfo.currencyCode,
-            });
-            setScreen("energy-context");
+      {screen === "business-type" && (
+        <BusinessContextScreen
+          initialType={formData.businessType}
+          onContinue={({ businessType }) => {
+            update({ businessType });
+            setScreen("business-location");
           }}
-          onBack={() => setScreen("business-context")}
+          onBack={() => setScreen("business-name")}
         />
       )}
 
-      {screen === "energy-context" && (
-        <EnergyContextScreen
-          currencySymbol={formData.currencySymbol}
-          currencyCode={formData.currencyCode}
-          onContinue={(energyObj) => {
-            update({ energy: energyObj });
+      {screen === "business-location" && (
+        <BusinessLocationScreen
+          initialLocation={formData.location}
+          initialEnergy={formData.energy}
+          onContinue={({ location, energy, currencyInfo }) => {
+            update({
+              location,
+              energy,
+              currencySymbol: currencyInfo.currencySymbol,
+              currencyCode: currencyInfo.currencyCode,
+            });
             setScreen("equipment-profile");
           }}
-          onBack={() => setScreen("location")}
+          onBack={() => setScreen("business-type")}
         />
       )}
 
       {screen === "equipment-profile" && (
         <EquipmentProfilingScreen
+          initialEquipment={formData.equipment}
           onContinue={(equipment) => {
             update({ equipment });
             setScreen("review");
           }}
-          onBack={() => setScreen("energy-context")}
+          onBack={() => setScreen("business-location")}
         />
       )}
 
@@ -126,6 +132,7 @@ export default function App() {
         <ResultsScreen
           outcome={outcome}
           currencySymbol={formData.currencySymbol || "$"}
+          currencyCode={formData.currencyCode}
           onReset={reset}
         />
       )}
