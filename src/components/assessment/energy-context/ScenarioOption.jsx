@@ -1,55 +1,39 @@
 import React from "react";
-import Typography from "../../../components/ui/Typography";
-import Card from "../../../components/ui/Card";
 
 export default function ScenarioOption({ opt, selected, onSelect }) {
   return (
     <button
       onClick={() => onSelect(opt.id)}
-      className={`w-full text-left rounded-xl transition-all ${
-        selected ? "ring-2 ring-[#2E7D32] scale-[1.01]" : "hover:bg-white"
-      }`}
-    >
-      <Card
-        className={`p-4 flex items-center justify-between ${
-          selected
-            ? "bg-[#F1F8E9] border-[#2E7D32]/20 shadow-lg"
-            : "bg-white shadow-none border-gray-100"
+      className={`w-full text-left rounded-xl border transition-all duration-200 flex items-center gap-3 px-4 py-3.5 ${selected
+          ? "border-[#2E7D32] bg-white shadow-sm"
+          : "border-gray-200 bg-white hover:border-gray-300"
         }`}
+    >
+      {/* Icon */}
+      <span
+        className={`material-icons-outlined text-xl ${selected ? "text-[#2E7D32]" : "text-gray-500"
+          }`}
       >
-        <div className="flex items-center space-x-4">
-          <span
-            className={`material-icons-outlined ${
-              selected ? "text-[#2E7D32]" : "text-gray-400"
-            }`}
-          >
-            {opt.icon}
-          </span>
-          <div>
-            <Typography
-              variant="body1"
-              className={`font-semibold ${
-                selected ? "text-[#2E7D32]" : "text-gray-700"
-              }`}
-            >
-              {opt.label}
-            </Typography>
-            <Typography
-              variant="caption"
-              color="textSecondary"
-              className="text-[11px]"
-            >
-              {opt.desc}
-            </Typography>
-          </div>
-        </div>
+        {opt.icon}
+      </span>
 
+      {/* Label */}
+      <span
+        className={`flex-1 text-sm font-medium ${selected ? "text-[#2E7D32]" : "text-gray-700"
+          }`}
+      >
+        {opt.label}
+      </span>
+
+      {/* Radio circle */}
+      <span
+        className={`w-5 h-5 rounded-full border-2 flex-shrink-0 flex items-center justify-center transition-all ${selected ? "border-[#2E7D32]" : "border-gray-300"
+          }`}
+      >
         {selected && (
-          <span className="material-icons-outlined text-[#2E7D32]">
-            check_circle
-          </span>
+          <span className="w-3 h-3 rounded-full bg-[#2E7D32]" />
         )}
-      </Card>
+      </span>
     </button>
   );
 }

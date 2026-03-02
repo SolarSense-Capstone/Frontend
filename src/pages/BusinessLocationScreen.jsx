@@ -1,14 +1,7 @@
 import React, { useState, useMemo } from "react";
 import BackNav from "../components/common/BackNav";
 import StickyContinue from "../components/common/StickyContinue";
-
-import LocationStepHeader from "../components/assessment/location/StepHeader";
-import CountrySelect from "../components/assessment/location/CountrySelect";
-import StateCityFields from "../components/assessment/location/StateCityFields";
-import AddressField from "../components/assessment/location/AddressField";
-import DetectedCurrencyBadge from "../components/assessment/location/DetectedCurrencyBadge";
-
-import EnergyStepHeader from "../components/assessment/energy-context/StepHeader";
+import ProgressBar from "../components/common/ProgressBar";
 import ScenarioSelector from "../components/assessment/energy-context/ScenarioSelector";
 import DieselDetails from "../components/assessment/energy-context/DieselDetails";
 
@@ -26,19 +19,33 @@ const COUNTRIES = [
 const SCENARIOS = [
     {
         id: "grid_only",
-        label: "Fully Grid",
-        desc: "You mainly use grid electricity.",
-        icon: "power",
+        label: "Fully on grid",
+        icon: "bolt",
     },
     {
         id: "diesel_replacement",
-        label: "Off Grid with Diesel Generator",
-        desc: "You use generator for a significant portion of power.",
+        label: "Grid + diesel generator",
         icon: "local_gas_station",
     },
 ];
 
-import ProgressBar from "../components/common/ProgressBar";
+const CITY_COORDINATES = {
+    // Nigeria
+    "Lagos": { lat: 6.4969, lng: 3.3553 },
+    "Abuja": { lat: 9.0765, lng: 7.3986 },
+    "Kano": { lat: 12.0022, lng: 8.5920 },
+    "Ibadan": { lat: 7.3775, lng: 3.9470 },
+    "Port Harcourt": { lat: 4.8156, lng: 7.0498 },
+    // Ghana
+    "Accra": { lat: 5.6037, lng: -0.1870 },
+    "Kumasi": { lat: 6.6666, lng: -1.6125 },
+    // Kenya
+    "Nairobi": { lat: -1.2921, lng: 36.8219 },
+    "Mombasa": { lat: -4.0435, lng: 39.6682 },
+    // South Africa
+    "Johannesburg": { lat: -26.2041, lng: 28.0473 },
+    "Cape Town": { lat: -33.9249, lng: 18.4241 },
+};
 
 export default function BusinessLocationScreen({
     initialLocation,
@@ -46,13 +53,11 @@ export default function BusinessLocationScreen({
     onContinue,
     onBack,
 }) {
-    // Location States
     const [country, setCountry] = useState(initialLocation?.country || "");
     const [state, setState] = useState(initialLocation?.state || "");
     const [city, setCity] = useState(initialLocation?.city || "");
     const [address, setAddress] = useState(initialLocation?.address || "");
 
-    // Energy States
     const [scenario, setScenario] = useState(initialEnergy?.energy_scenario || null);
     const [dieselHoursPerDay, setDieselHoursPerDay] = useState(
         initialEnergy?.diesel?.hours_per_day || ""
@@ -66,12 +71,10 @@ export default function BusinessLocationScreen({
     const currencyCode = selectedCountry ? selectedCountry.code : "";
 
     const showDiesel = scenario === "diesel_replacement";
-
     const isLocationValid = country && city;
 
     const isEnergyValid = useMemo(() => {
         if (!scenario) return false;
-
         if (showDiesel) {
             const h = Number(dieselHoursPerDay);
             const p = Number(dieselPricePerLiter);
@@ -86,7 +89,33 @@ export default function BusinessLocationScreen({
     const handleContinue = () => {
         if (!isValid) return;
 
-        const locationObj = { country, state, city, address };
+        const normalizedCity = city.trim();
+        let coords = CITY_COORDINATES[normalizedCity];
+
+        // If city not found, fallback to country capitals to avoid sending Lagos for everyone
+        if (!coords) {
+            const countryDefaults = {
+                "Nigeria": CITY_COORDINATES["Lagos"],
+                "Ghana": CITY_COORDINATES["Accra"],
+                "Kenya": CITY_COORDINATES["Nairobi"],
+                "South Africa": CITY_COORDINATES["Johannesburg"],
+                "Ethiopia": { lat: 9.0054, lng: 38.7636 }, // Addis Ababa
+                "Uganda": { lat: 0.3476, lng: 32.5825 }, // Kampala
+                "Tanzania": { lat: -6.7924, lng: 39.2083 }, // Dar es Salaam
+                "Rwanda": { lat: -1.9441, lng: 30.0619 }, // Kigali
+            };
+            coords = countryDefaults[country] || CITY_COORDINATES["Lagos"];
+        }
+
+        const locationObj = {
+            country,
+            state,
+            city,
+            address,
+            latitude: coords.lat,
+            longitude: coords.lng
+        };
+
         const energyObj = {
             energy_scenario: scenario,
             uses_diesel: scenario === "diesel_replacement",
@@ -99,7 +128,6 @@ export default function BusinessLocationScreen({
                     }
                     : null,
         };
-
         onContinue({
             location: locationObj,
             energy: energyObj,
@@ -110,55 +138,109 @@ export default function BusinessLocationScreen({
     return (
         <div className="flex-1 flex flex-col bg-[#F9FAFB] px-6 pt-12 md:pt-24 pb-32 md:pb-40">
             <div className="max-w-xl mx-auto w-full">
-                <BackNav onBack={onBack} />
                 <ProgressBar step={3} totalSteps={5} />
+                <BackNav onBack={onBack} />
 
-                {/* --- LOCATION SECTION --- */}
-                <LocationStepHeader title="Where is your business located?" />
+                {/* LOCATION SECTION */}
+                <div className="mb-10 mt-4">
+                    <h2 className="text-2xl md:text-3xl font-bold text-gray-900 text-center mb-1">
+                        Where is your business located?
+                    </h2>
+                    <p className="text-gray-400 text-sm text-center mb-8">
+                        Solar estimates are based on regional data.
+                    </p>
 
-                <div className="space-y-6 mb-12">
-                    <CountrySelect
-                        country={country}
-                        setCountry={setCountry}
-                        countries={COUNTRIES}
-                    />
+                    {/* Row 1: Country + State/Province */}
+                    <div className="grid grid-cols-2 gap-4 mb-4">
+                        <div>
+                            <label htmlFor="country-select" className="block mb-2">
+                                <span className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">Country</span>
+                            </label>
+                            <select
+                                id="country-select"
+                                name="country"
+                                value={country}
+                                onChange={(e) => setCountry(e.target.value)}
+                                className="w-full bg-white border border-gray-200 rounded-xl pl-4 pr-10 py-3.5 text-sm focus:ring-2 focus:ring-[#2E7D32] outline-none shadow-sm appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20viewBox%3D%220%200%2024%2024%22%20stroke%3D%22%23111827%22%20stroke-width%3D%222%22%3E%3Cpath%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20d%3D%22m19%209-7%207-7-7%22%2F%3E%3C%2Fsvg%3E')] bg-[length:1.1rem] bg-[position:right_0.75rem_center] bg-no-repeat"
+                            >
+                                <option value="">Select country</option>
+                                {COUNTRIES.map((c) => (
+                                    <option key={c.name} value={c.name}>{c.name}</option>
+                                ))}
+                            </select>
+                        </div>
 
-                    <StateCityFields
-                        state={state}
-                        setState={setState}
-                        city={city}
-                        setCity={setCity}
-                    />
-
-                    <AddressField address={address} setAddress={setAddress} />
-
-                    {currency && <DetectedCurrencyBadge currency={currency} />}
-                </div>
-
-                {/* --- ENERGY SECTION --- */}
-                {isLocationValid && (
-                    <div className="animate-slide-up opacity-0 animation-delay-100">
-                        <EnergyStepHeader title="Power Supply Details" />
-
-                        <div className="space-y-8 mt-6">
-                            <ScenarioSelector
-                                label="How does your business currently get electricity?"
-                                scenarios={SCENARIOS}
-                                value={scenario}
-                                onChange={setScenario}
+                        <div>
+                            <label htmlFor="state-input" className="block mb-2">
+                                <span className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">State / Province</span>
+                            </label>
+                            <input
+                                id="state-input"
+                                name="state"
+                                type="text"
+                                value={state}
+                                onChange={(e) => setState(e.target.value)}
+                                placeholder="Enter state"
+                                className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3.5 text-sm focus:ring-2 focus:ring-[#2E7D32] outline-none shadow-sm"
                             />
-
-                            {showDiesel && (
-                                <DieselDetails
-                                    dieselHoursPerDay={dieselHoursPerDay}
-                                    setDieselHoursPerDay={setDieselHoursPerDay}
-                                    dieselPricePerLiter={dieselPricePerLiter}
-                                    setDieselPricePerLiter={setDieselPricePerLiter}
-                                />
-                            )}
                         </div>
                     </div>
-                )}
+
+                    {/* Row 2: City + Street Address */}
+                    <div className="grid grid-cols-2 gap-4">
+                        <div>
+                            <label htmlFor="city-input" className="block mb-2">
+                                <span className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">City</span>
+                            </label>
+                            <input
+                                id="city-input"
+                                name="city"
+                                type="text"
+                                value={city}
+                                onChange={(e) => setCity(e.target.value)}
+                                placeholder="Enter city"
+                                className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3.5 text-sm focus:ring-2 focus:ring-[#2E7D32] outline-none shadow-sm"
+                            />
+                        </div>
+
+                        <div>
+                            <label htmlFor="street-address" className="block mb-2">
+                                <span className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">Street Address (Optional)</span>
+                            </label>
+                            <input
+                                id="street-address"
+                                name="address"
+                                type="text"
+                                value={address}
+                                onChange={(e) => setAddress(e.target.value)}
+                                placeholder="Enter address"
+                                className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3.5 text-sm focus:ring-2 focus:ring-[#2E7D32] outline-none shadow-sm"
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                {/* ENERGY SECTION */}
+                <div>
+                    <ScenarioSelector
+                        label="How does your business currently get electricity?"
+                        scenarios={SCENARIOS}
+                        value={scenario}
+                        onChange={setScenario}
+                    />
+
+                    {showDiesel && (
+                        <div className="mt-4">
+                            <DieselDetails
+                                dieselHoursPerDay={dieselHoursPerDay}
+                                setDieselHoursPerDay={setDieselHoursPerDay}
+                                dieselPricePerLiter={dieselPricePerLiter}
+                                setDieselPricePerLiter={setDieselPricePerLiter}
+                                currencySymbol={currency}
+                            />
+                        </div>
+                    )}
+                </div>
             </div>
 
             <StickyContinue canContinue={isValid} onClick={handleContinue} />

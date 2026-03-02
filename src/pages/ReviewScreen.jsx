@@ -6,7 +6,7 @@ const EQUIPMENT_LABELS = {
   freezers: "Freezers",
   refrigerators: "Refrigerators",
   coldRoom: "Cold Room",
-  displayChillers: "Display Chillers",
+  displayChillers: "Display Coolers",
   iceMachines: "Ice Machines",
   lighting: "Lighting",
 };
@@ -48,26 +48,26 @@ export default function ReviewScreen({ data, onContinue, onBack }) {
             {/* Business Info Row */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
               <div>
-                <p className="text-[11px] text-gray-400 font-bold uppercase tracking-widest mb-1 shadow-sm">Business Name</p>
+                <p className="text-[11px] text-gray-400 font-bold uppercase tracking-widest mb-1">Business Name</p>
                 <p className="font-semibold text-gray-900">{businessName}</p>
               </div>
               <div>
-                <p className="text-[11px] text-gray-400 font-bold uppercase tracking-widest mb-1 shadow-sm">Business Type</p>
+                <p className="text-[11px] text-gray-400 font-bold uppercase tracking-widest mb-1">Business Type</p>
                 <p className="font-semibold text-gray-900">{businessType}</p>
               </div>
             </div>
 
             {/* Location */}
             <div className="mb-8">
-              <p className="text-[11px] text-gray-400 font-bold uppercase tracking-widest mb-1 shadow-sm">Location</p>
+              <p className="text-[11px] text-gray-400 font-bold uppercase tracking-widest mb-1">Location</p>
               <p className="font-semibold text-gray-900">
-                {[location.city, location.state, location.country].filter(Boolean).join(", ")}
+                {[location.address, location.city, location.state, location.country].filter(Boolean).join(", ")}
               </p>
             </div>
 
             {/* Energy Scenario */}
             <div className="mb-10">
-              <p className="text-[11px] text-gray-400 font-bold uppercase tracking-widest mb-1 shadow-sm">Energy Scenario</p>
+              <p className="text-[11px] text-gray-400 font-bold uppercase tracking-widest mb-1">Energy Scenario</p>
               <p className="font-semibold text-gray-900 mb-3">{scenarioLabel}</p>
 
               {energy?.uses_diesel && (
@@ -86,14 +86,14 @@ export default function ReviewScreen({ data, onContinue, onBack }) {
 
             {/* Equipment Summary */}
             <div>
-              <p className="text-[11px] text-gray-400 font-bold uppercase tracking-widest mb-3 shadow-sm">Equipment Summary</p>
+              <p className="text-[11px] text-gray-400 font-bold uppercase tracking-widest mb-3">Equipment Summary</p>
               {activeEquipment.length > 0 ? (
                 <div className="space-y-3">
                   {activeEquipment.map((eq, idx) => (
                     <div key={idx} className="flex justify-between items-center py-4 px-5 bg-gray-50 rounded-xl border border-gray-100">
                       <span className="font-bold text-gray-900">{eq.label}</span>
                       <div className="text-right">
-                        <p className="font-bold text-[#2E7D32] text-sm">{eq.quantity} unit{eq.quantity > 1 ? 's' : ''}</p>
+                        <p className="font-bold text-[#2E7D32] text-sm">{eq.quantity} unit{eq.quantity > 1 ? "s" : ""}</p>
                         <p className="text-gray-400 text-xs mt-0.5">{eq.hoursPerDay} hrs/day</p>
                       </div>
                     </div>
@@ -115,24 +115,17 @@ export default function ReviewScreen({ data, onContinue, onBack }) {
           </div>
 
         </div>
+      </div>
 
-        {/* Footer Buttons */}
-        <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-4 animate-slide-up opacity-0 animation-delay-300">
-          <button
-            onClick={onBack}
-            className="w-full sm:w-1/3 px-6 py-4 font-bold text-[#2E7D32] bg-white border border-[#2E7D32] rounded-xl hover:bg-gray-50 transition-colors"
-          >
-            Edit Details
-          </button>
-          <button
-            onClick={onContinue}
-            className="w-full sm:w-1/3 px-8 py-4 font-bold text-white bg-[#2E7D32] rounded-xl flex items-center justify-center gap-2 hover:bg-[#1B5E20] transition-colors"
-          >
-            Start Analysis
-            <span className="material-icons-outlined text-sm">equalizer</span>
-          </button>
-        </div>
-
+      {/* Sticky Start Analysis Button */}
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 px-6 py-4">
+        <button
+          onClick={onContinue}
+          className="w-full max-w-lg mx-auto flex px-8 py-4 font-bold text-white bg-[#2E7D32] rounded-xl items-center justify-center gap-2 hover:bg-[#1B5E20] transition-colors"
+        >
+          Start Analysis
+          <span className="material-icons-outlined text-sm">equalizer</span>
+        </button>
       </div>
     </div>
   );
