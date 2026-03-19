@@ -2,6 +2,7 @@ import React, { useState, useMemo } from "react";
 import BackNav from "../components/common/BackNav";
 import StickyContinue from "../components/common/StickyContinue";
 import ProgressBar from "../components/common/ProgressBar";
+import StepIntro from "../components/assessment/business-context/StepIntro";
 import ScenarioSelector from "../components/assessment/energy-context/ScenarioSelector";
 import DieselDetails from "../components/assessment/energy-context/DieselDetails";
 
@@ -147,18 +148,17 @@ export default function BusinessLocationScreen({
 
                 {/* LOCATION SECTION */}
                 <div className="mb-10 w-full mt-4">
-                    <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 text-center mb-2">
-                        Where is your business located?
-                    </h2>
-                    <p className="text-gray-500 font-normal text-sm text-center mb-8">
-                        Solar estimates are based on regional data.
-                    </p>
+                    <StepIntro
+                        title="Where is your business located?"
+                        subtitle="Solar estimates are based on regional data."
+                        className="text-center mb-8 animate-slide-up opacity-0"
+                    />
 
                     {/* Row 1: Country + State/Province */}
-                    <div className="grid grid-cols-2 gap-4 mb-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
                         <div>
                             <label htmlFor="country-select" className="block mb-2">
-                                <span className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">Country</span>
+                                <span className="text-xs md:text-sm font-semibold text-gray-500 uppercase tracking-wide">Country</span>
                             </label>
                             <select
                                 id="country-select"
@@ -176,7 +176,7 @@ export default function BusinessLocationScreen({
 
                         <div>
                             <label htmlFor="state-input" className="block mb-2">
-                                <span className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">State / Province (Optional)</span>
+                                <span className="text-xs md:text-sm font-semibold text-gray-500 uppercase tracking-wide">State / Province (Optional)</span>
                             </label>
                             <input
                                 id="state-input"
@@ -191,10 +191,10 @@ export default function BusinessLocationScreen({
                     </div>
 
                     {/* Row 2: City + Street Address */}
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                             <label htmlFor="city-input" className="block mb-2">
-                                <span className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">City</span>
+                                <span className="text-xs md:text-sm font-semibold text-gray-500 uppercase tracking-wide">City</span>
                             </label>
                             <input
                                 id="city-input"
@@ -209,7 +209,7 @@ export default function BusinessLocationScreen({
 
                         <div>
                             <label htmlFor="street-address" className="block mb-2">
-                                <span className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">Street Address (Optional)</span>
+                                <span className="text-xs md:text-sm font-semibold text-gray-500 uppercase tracking-wide">Street Address (Optional)</span>
                             </label>
                             <input
                                 id="street-address"

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import BackNav from "../components/common/BackNav";
 import StickyContinue from "../components/common/StickyContinue";
 import ProgressBar from "../components/common/ProgressBar";
+import StepIntro from "../components/assessment/business-context/StepIntro";
 
 const EQUIPMENT_TYPES = [
   {
@@ -90,12 +91,11 @@ export default function EquipmentProfilingScreen({ initialEquipment, onContinue,
           <BackNav onBack={onBack} />
         </div>
 
-        <div className="w-full text-center my-8">
-          <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 mb-2">
-            What equipment do you use daily?
-          </h2>
-          <p className="text-gray-500 font-normal text-sm">Specify quantity and daily usage hours for each.</p>
-        </div>
+        <StepIntro
+          title="What equipment do you use daily?"
+          subtitle="Specify quantity and daily usage hours for each."
+          className="text-center mb-8 animate-slide-up opacity-0 mt-4"
+        />
 
         <div className="space-y-3 w-full">
           {EQUIPMENT_TYPES.map(({ id, label, icon, iconBg, iconColor }) => {
@@ -106,54 +106,64 @@ export default function EquipmentProfilingScreen({ initialEquipment, onContinue,
             return (
               <div
                 key={id}
-                className="bg-white px-5 py-4 rounded-xl border border-gray-100 shadow-sm flex items-center gap-4"
+                className="bg-white px-3 md:px-5 py-4 rounded-xl border border-gray-100 shadow-sm flex items-center justify-between gap-2 md:gap-4 hover:border-gray-200 transition-colors"
               >
-                {/* Icon */}
-                <div className={`w-10 h-10 rounded-xl ${iconBg} flex items-center justify-center flex-shrink-0`}>
-                  <span className={`material-icons-outlined text-xl ${iconColor}`}>
-                    {icon}
+                {/* Left Side: Icon & Label */}
+                <div className="flex flex-1 items-center min-w-0 pr-2">
+                  <div className={`w-8 h-8 md:w-10 md:h-10 rounded-xl ${iconBg} flex items-center justify-center flex-shrink-0 mr-3 md:mr-4`}>
+                    <span className={`material-icons-outlined text-lg md:text-xl ${iconColor}`}>
+                      {icon}
+                    </span>
+                  </div>
+                  <span className="font-semibold text-gray-800 text-xs md:text-sm truncate">
+                    {label}
                   </span>
                 </div>
 
-                {/* Label */}
-                <span className="flex-1 font-medium text-gray-800 text-sm">
-                  {label}
-                </span>
-
-                {/* Quantity */}
-                <div className="flex flex-col items-center gap-1">
-                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Quantity</span>
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={() => updateEquipment(id, "quantity", Math.max(0, q - 1))}
-                      className="w-7 h-7 rounded-full border border-gray-200 text-gray-500 hover:bg-gray-50 active:bg-gray-100 flex items-center justify-center text-base font-medium"
-                    >
-                      −
-                    </button>
-                    <span className="w-5 text-center text-sm font-semibold text-gray-800">{q}</span>
-                    <button
-                      onClick={() => updateEquipment(id, "quantity", q + 1)}
-                      className="w-7 h-7 rounded-full border border-gray-200 text-gray-500 hover:bg-gray-50 active:bg-gray-100 flex items-center justify-center text-base font-medium"
-                    >
-                      +
-                    </button>
+                {/* Right Side: Fixed Width Controls */}
+                <div className="flex items-center gap-2 md:gap-6 flex-shrink-0">
+                  {/* Quantity */}
+                  <div className="flex flex-col items-center gap-1.5 w-[72px] md:w-[84px]">
+                    <span className="text-[10px] md:text-xs font-semibold text-gray-500 uppercase tracking-wide leading-none">Quantity</span>
+                    <div className="flex items-center justify-between w-full">
+                      <button
+                        onClick={() => updateEquipment(id, "quantity", Math.max(0, q - 1))}
+                        className="w-6 h-6 md:w-7 md:h-7 rounded-full border border-gray-200 text-gray-400 hover:bg-gray-50 active:bg-gray-100 flex items-center justify-center text-sm md:text-base font-medium transition-colors"
+                      >
+                        −
+                      </button>
+                      <span className="text-xs md:text-sm font-bold text-gray-900">{q}</span>
+                      <button
+                        onClick={() => updateEquipment(id, "quantity", q + 1)}
+                        className="w-6 h-6 md:w-7 md:h-7 rounded-full border border-gray-200 text-gray-400 hover:bg-gray-50 active:bg-gray-100 flex items-center justify-center text-sm md:text-base font-medium transition-colors"
+                      >
+                        +
+                      </button>
+                    </div>
                   </div>
-                </div>
 
-                {/* Hours Per Day */}
-                <div className="flex flex-col items-center gap-1">
-                  <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest whitespace-nowrap">Hours Per Day</span>
-                  <input
-                    type="number"
-                    min="0"
-                    max="24"
-                    disabled={q === 0}
-                    value={h === 0 && q === 0 ? "" : h}
-                    onChange={(e) => updateEquipment(id, "hoursPerDay", e.target.value)}
-                    placeholder="1-24"
-                    className={`w-16 px-2 py-1.5 border border-gray-200 rounded-lg text-sm text-center focus:ring-2 focus:ring-[#2E7D32] focus:border-[#2E7D32] outline-none ${q === 0 ? "bg-gray-50 text-gray-400 cursor-not-allowed" : "bg-white text-gray-800"
-                      }`}
-                  />
+                  {/* Hours Per Day */}
+                  <div className="flex flex-col items-center gap-1.5 w-[64px] md:w-[72px]">
+                    <span className="text-[10px] md:text-xs font-semibold text-gray-500 uppercase tracking-wide leading-none whitespace-nowrap text-center">Hours Per Day</span>
+                    <input
+                      type="text"
+                      inputMode="numeric"
+                      disabled={q === 0}
+                      value={h === 0 && q === 0 ? "" : h}
+                      onChange={(e) => {
+                        const val = e.target.value.replace(/[^0-9]/g, "");
+                        const num = Number(val);
+                        if (val === "" || (num >= 0 && num <= 24)) {
+                          updateEquipment(id, "hoursPerDay", val);
+                        }
+                      }}
+                      placeholder="1-24"
+                      className={`w-full h-7 md:h-8 px-1 md:px-2 border rounded-lg text-xs md:text-sm text-center font-medium focus:ring-2 focus:ring-[#2E7D32] outline-none transition-colors ${q === 0
+                        ? "bg-gray-50 border-gray-100 text-gray-400 cursor-not-allowed"
+                        : "bg-white border-gray-200 text-gray-900"
+                        }`}
+                    />
+                  </div>
                 </div>
               </div>
             );

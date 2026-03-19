@@ -4,9 +4,11 @@ import Button from "../ui/Button";
 
 export default function HeroSection({ onStart, scrollToSection }) {
   return (
-    <section className="relative min-h-[85vh] md:min-h-[90vh] flex items-center pt-36 md:pt-48 pb-12 overflow-hidden bg-white">
-      <div className="absolute top-0 right-0 w-[60%] lg:w-1/2 h-full bg-[#F1F8E9] -skew-x-12 translate-x-1/4 z-0" />
-      <div className="absolute -top-24 -left-24 w-96 h-96 bg-[#2E7D32]/5 rounded-full blur-3xl z-0" />
+    <section className="relative min-h-[85vh] md:min-h-[90vh] flex items-center pt-36 md:pt-48 pb-12 bg-white">
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+        <div className="absolute top-0 right-0 w-[60%] lg:w-1/2 h-full bg-[#F1F8E9] -skew-x-12 translate-x-1/4" />
+        <div className="absolute -top-24 -left-24 w-96 h-96 bg-[#2E7D32]/5 rounded-full blur-3xl" />
+      </div>
 
       <div className="max-w-7xl mx-auto px-6 w-full grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-16 items-center relative z-10">
         <div className="animate-slide-up flex flex-col items-center text-center lg:items-start lg:text-left">
@@ -126,21 +128,19 @@ export default function HeroSection({ onStart, scrollToSection }) {
               />
             </div>
 
-            <div className="absolute -bottom-6 -right-6 md:-bottom-10 md:-right-10 bg-[#111827] text-white p-4 md:p-8 rounded-[24px] md:rounded-[32px] shadow-2xl max-w-[180px] md:max-w-xs z-20">
-              <Typography
-                variant="body1"
-                className="italic font-medium mb-2 md:mb-4 opacity-90 text-[10px] md:text-sm leading-relaxed"
-              >
-                Cut energy costs with confidence.
-              </Typography>
+            <div className="absolute -bottom-8 left-4 md:left-auto right-4 md:-bottom-10 md:-right-10 bg-[#111827] text-white p-5 md:p-8 rounded-[24px] md:rounded-[32px] shadow-2xl z-20 md:max-w-xs max-w-[260px]">
+              <p className="italic font-medium mb-3 md:mb-4 opacity-100 text-[11px] md:text-sm leading-relaxed text-white">
+                "Cut energy costs with confidence. Independent data for real businesses."
+              </p>
 
-              <Typography
-                variant="caption"
-                className="font-semibold text-[#2E7D32] text-[10px] md:text-xs tracking-wide"
-              >
-                Discover potential savings, system size, and ROI before
-                investing in solar.
-              </Typography>
+              <div className="flex items-center space-x-2 border-t border-gray-800 pt-3">
+                <div className="w-5 h-5 rounded-full bg-[#2E7D32]/20 flex items-center justify-center flex-shrink-0">
+                  <span className="material-icons-outlined text-[#2E7D32] text-[10px]">person</span>
+                </div>
+                <p className="font-semibold text-[#2E7D32] text-[10px] md:text-[11px] tracking-wide">
+                  G58, Founders
+                </p>
+              </div>
             </div>
           </div>
         </div>
