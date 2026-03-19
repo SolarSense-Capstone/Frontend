@@ -55,6 +55,7 @@ export default function BusinessLocationScreen({
     onBack,
 }) {
     const [country, setCountry] = useState(initialLocation?.country || "");
+    const [isCountryOpen, setIsCountryOpen] = useState(false);
     const [state, setState] = useState(initialLocation?.state || "");
     const [city, setCity] = useState(initialLocation?.city || "");
     const [address, setAddress] = useState(initialLocation?.address || "");
@@ -156,22 +157,49 @@ export default function BusinessLocationScreen({
 
                     {/* Row 1: Country + State/Province */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-                        <div>
+                        <div className="relative">
                             <label htmlFor="country-select" className="block mb-2">
                                 <span className="text-xs md:text-sm font-semibold text-gray-500 uppercase tracking-wide">Country</span>
                             </label>
-                            <select
-                                id="country-select"
-                                name="country"
-                                value={country}
-                                onChange={(e) => setCountry(e.target.value)}
-                                className="w-full bg-white border border-gray-200 rounded-xl pl-4 pr-10 py-3.5 text-sm focus:ring-2 focus:ring-[#2E7D32] outline-none shadow-sm appearance-none bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20fill%3D%22none%22%20viewBox%3D%220%200%2024%2024%22%20stroke%3D%22%23111827%22%20stroke-width%3D%222%22%3E%3Cpath%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20d%3D%22m19%209-7%207-7-7%22%2F%3E%3C%2Fsvg%3E')] bg-[length:1.1rem] bg-[position:right_0.75rem_center] bg-no-repeat"
+                            <button
+                                type="button"
+                                onClick={() => setIsCountryOpen(!isCountryOpen)}
+                                className="w-full bg-white border border-gray-200 rounded-xl px-4 py-3.5 text-sm text-left flex justify-between items-center focus:ring-2 focus:ring-[#2E7D32] outline-none shadow-sm"
                             >
-                                <option value="">Select country</option>
-                                {COUNTRIES.map((c) => (
-                                    <option key={c.name} value={c.name}>{c.name}</option>
-                                ))}
-                            </select>
+                                <span className={country ? "text-gray-900 font-medium" : "text-gray-500"}>
+                                    {country || "Select country"}
+                                </span>
+                                <span className={`material-icons-outlined text-gray-500 transition-transform ${isCountryOpen ? "rotate-180" : ""}`}>
+                                    expand_more
+                                </span>
+                            </button>
+
+                            {isCountryOpen && (
+                                <>
+                                    <div
+                                        className="fixed inset-0 z-40"
+                                        onClick={() => setIsCountryOpen(false)}
+                                    />
+                                    <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-100 rounded-xl shadow-2xl z-50 max-h-60 overflow-y-auto py-2 animate-fade-in">
+                                        {COUNTRIES.map((c) => (
+                                            <button
+                                                key={c.name}
+                                                type="button"
+                                                onClick={() => {
+                                                    setCountry(c.name);
+                                                    setIsCountryOpen(false);
+                                                }}
+                                                className={`w-full text-left px-5 py-3 text-sm transition-colors ${country === c.name
+                                                        ? "text-[#2E7D32] font-bold bg-[#F1F8E9]"
+                                                        : "text-gray-700 hover:bg-gray-50 font-medium"
+                                                    }`}
+                                            >
+                                                {c.name}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </>
+                            )}
                         </div>
 
                         <div>

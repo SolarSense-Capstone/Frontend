@@ -8,11 +8,11 @@ export default function DieselDetails({
   currencySymbol,
 }) {
   return (
-    <div className="grid grid-cols-2 gap-4 animate-slide-up opacity-0">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 animate-slide-up opacity-0">
       {/* Generator Hours Per Day */}
       <div>
         <label htmlFor="gen-hours" className="block mb-2">
-          <span className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">
+          <span className="text-xs md:text-sm font-semibold text-gray-500 uppercase tracking-wide">
             Generator Hours Per Day
           </span>
         </label>
@@ -33,7 +33,7 @@ export default function DieselDetails({
       {/* Diesel Price Per Litre */}
       <div>
         <label htmlFor="diesel-price" className="block mb-2">
-          <span className="text-[11px] font-bold text-gray-400 uppercase tracking-widest">
+          <span className="text-xs md:text-sm font-semibold text-gray-500 uppercase tracking-wide">
             Diesel Price Per Litre
           </span>
         </label>
